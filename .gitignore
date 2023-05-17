@@ -1,7 +1,3 @@
-tests/animation/animation.pde
-tests/animation1/animation1.pde
-tests/animationPOC/animationPOC.pde
-tests/animation_circle/animation_circle.pde
-tests/animation_circle/.vscode/tasks.json
-tests/animation_circle/out/animation_circle.class
-tests/animation_circle/out/source/animation_circle.java
+.vscode/
+out/
+tests/
