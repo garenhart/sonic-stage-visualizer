@@ -21,7 +21,8 @@ int circleColor;
 PianoKeyboard pianoKeyboard;
 
 void setup() {
-  size(640, 480);
+  size(1800, 800);
+  //fullScreen();
   frameRate(30);
   smooth();
   //noStroke();
@@ -29,16 +30,17 @@ void setup() {
   // start oscP5, listening for incoming messages at port 12000
   oscP5 = new OscP5(this, 8000);
 
+  pianoKeyboard = new PianoKeyboard("top", width, height, 10, 2, 5);
+
   // initialize variables
   pulseAmp = 0;
   circleX = width/2;
-  circleY = height/2;
+  circleY = height/2 + pianoKeyboard.height/2;
   circleMinSize = 10;
   circleMaxSize = height/2-circleMinSize;
   circleSize = 0;
   circleColor = 0;
 
-  pianoKeyboard = new PianoKeyboard("top", width, height, 10, 2, 5);
 
 }
 
@@ -46,7 +48,7 @@ void setup() {
 // which grows and shrinks in size based on the value of pulseAmp
 // and changes color  between blue and red based on the value of pulseAmp
 void draw() {
-  background(255);
+  background(0);
   
   // calculate the size of the circle based on pulseAmp
   circleSize = map(pulseAmp, 0, 1, circleMinSize, circleMaxSize);
