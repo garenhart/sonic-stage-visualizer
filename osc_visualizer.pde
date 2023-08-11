@@ -17,12 +17,17 @@ float circleMaxSize;
 // declare variables for circle color
 int circleColor;
 
+PImage imgDrum;
+
 // declare variables for piano keyboard
 PianoKeyboard pianoKeyboard;
 
 void setup() {
-  size(1800, 800);
-  //fullScreen();
+  //imgDrum = loadImage("comic-jazz-drum-800.png");
+  imgDrum = loadImage("blue-drum.png");
+
+  //size(1800, 900);
+  fullScreen();
   frameRate(30);
   smooth();
   //noStroke();
@@ -59,6 +64,14 @@ void draw() {
   // draw the piano keyboard
   pianoKeyboard.render();    
 
+  // draw the image in the middle of the screen
+  // image(imgDrum, width/2-imgDrum.width/2, height/2-imgDrum.height/2);
+
+  // draw the image in the middle of the screen below the piano keyboard
+  image (imgDrum, width/2-imgDrum.width/2, height/2+pianoKeyboard.height-imgDrum.height/2);
+
+
+  //image(img, 0, 0); // width, height/2);
   // draw the circle
   fill(circleColor, 0, 255-circleColor);
   ellipse(circleX, circleY, circleSize, circleSize);
