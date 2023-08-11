@@ -70,8 +70,6 @@ void draw() {
   // draw the image in the middle of the screen below the piano keyboard
   image (imgDrum, width/2-imgDrum.width/2, height/2+pianoKeyboard.height-imgDrum.height/2);
 
-
-  //image(img, 0, 0); // width, height/2);
   // draw the circle
   fill(circleColor, 0, 255-circleColor);
   ellipse(circleX, circleY, circleSize, circleSize);
