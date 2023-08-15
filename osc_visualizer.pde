@@ -2,6 +2,8 @@ import oscP5.*;
 
 OscP5 oscP5;
 
+ArrayList <ParticleController> pcs = new ArrayList <ParticleController>();
+
 // declare variables for pulse amplitude, frequency, and color
 float pulseAmp;
 float pulseFreq;
@@ -23,11 +25,8 @@ PImage imgDrum;
 PianoKeyboard pianoKeyboard;
 
 void setup() {
-  //imgDrum = loadImage("comic-jazz-drum-800.png");
-  imgDrum = loadImage("blue-drum.png");
-
-  //size(1800, 900);
-  fullScreen();
+  size(1800, 900);
+  //fullScreen();
   frameRate(30);
   smooth();
   //noStroke();
@@ -37,6 +36,12 @@ void setup() {
 
   pianoKeyboard = new PianoKeyboard("top", width, height, 10, 2, 5);
 
+  //imgDrum = loadImage("comic-jazz-drum-800.png");
+  imgDrum = loadImage("black-blue-yellow-drum.png");
+
+  imgDrum.loadPixels();
+
+
   // initialize variables
   pulseAmp = 0;
   circleX = width/2;
@@ -45,15 +50,13 @@ void setup() {
   circleMaxSize = height/2-circleMinSize;
   circleSize = 0;
   circleColor = 0;
-
-
 }
 
 // draw a circle of circleMinSize at the center of the screen
 // which grows and shrinks in size based on the value of pulseAmp
 // and changes color  between blue and red based on the value of pulseAmp
 void draw() {
-  background(0);
+  background(100);
   
   // calculate the size of the circle based on pulseAmp
   circleSize = map(pulseAmp, 0, 1, circleMinSize, circleMaxSize);
@@ -67,8 +70,16 @@ void draw() {
   // draw the image in the middle of the screen
   // image(imgDrum, width/2-imgDrum.width/2, height/2-imgDrum.height/2);
 
+  pushMatrix();
+  translate(width/2-imgDrum.width/2, height/2+pianoKeyboard.height-imgDrum.height/2);
   // draw the image in the middle of the screen below the piano keyboard
-  image (imgDrum, width/2-imgDrum.width/2, height/2+pianoKeyboard.height-imgDrum.height/2);
+  image (imgDrum, 0, 0);
+
+  for (ParticleController current : pcs) {
+      current.update(imgDrum);
+      current.render(imgDrum);
+  }
+  popMatrix();
 
   // draw the circle
   fill(circleColor, 0, 255-circleColor);
@@ -89,4 +100,23 @@ void oscEvent(OscMessage msg) {
     pianoKeyboard.resetKeys();
     pianoKeyboard.setKeyPressed(note, true);
   }
+}
+
+void mouseClicked() {
+    ParticleController pCont = new ParticleController();
+    
+    translate(width/2-imgDrum.width/2, height/2+pianoKeyboard.height-imgDrum.height/2);
+    pCont.createParticles(mouseX-(width/2-imgDrum.width/2), mouseY-(height/2+pianoKeyboard.height-imgDrum.height/2), 50);
+    // Add new controller to the array
+    pcs.add(pCont);
+}
+
+
+void keyPressed() {
+    if (key == 'q') {
+        for (ParticleController current : pcs) {
+            int numbers = current.ar.size();
+            println(numbers);
+        }
+    }
 }
