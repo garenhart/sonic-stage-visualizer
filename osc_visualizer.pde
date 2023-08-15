@@ -76,7 +76,7 @@ void draw() {
   image (imgDrum, 0, 0);
 
   for (ParticleController current : pcs) {
-      current.update(imgDrum);
+      current.update(imgDrum, 100); // second parameter specifies the distance particles can travel before being removed
       current.render(imgDrum);
   }
   popMatrix();

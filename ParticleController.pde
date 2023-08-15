@@ -8,18 +8,31 @@ class ParticleController {
             ar.add(lObj);
         }
     }
-    void update(PImage pimg) {
+
+    // Update the position of the particles
+    // Remove those particles that meet the remove criterion
+    // 0 - remove particles that moved out of the screen
+    // >0 - remove particles that moved farther than the removeCriterion from the center
+    void update(PImage pimg, int removeCriterion) {
         ArrayList <Particle > remove = new ArrayList <Particle>();
         for (Particle tmp : ar) {
             tmp.x = tmp.cx + sin(radians(tmp.angle)) * (tmp.dist * counter);
             tmp.y = tmp.cy - cos(radians(tmp.angle)) * (tmp.dist * counter);
             
-            // Add those particles that moved out of the screen to "remove" list
-            if (tmp.x < 0 || tmp.x > pimg.width) {
-                remove.add(tmp);
+            if (removeCriterion > 0) {
+                // Add those particles that moved farther than the removeCriterion from the center to "remove" list
+                if (dist(tmp.x, tmp.y, tmp.cx, tmp.cy) > removeCriterion) {
+                    remove.add(tmp);
+                }
             }
-            if (tmp.y < 0 || tmp.y > pimg.height) {
-                remove.add(tmp);
+            else {
+                // Add those particles that moved out of the screen to "remove" list
+                if (tmp.x < 0 || tmp.x > pimg.width) {
+                    remove.add(tmp);
+                }
+                if (tmp.y < 0 || tmp.y > pimg.height) {
+                    remove.add(tmp);
+                }
             }
         }
         
