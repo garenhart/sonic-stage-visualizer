@@ -76,24 +76,59 @@ void draw() {
   image (imgDrum, 0, 0);
 
   for (ParticleController current : pcs) {
-      current.update(imgDrum, 100); // second parameter specifies the distance particles can travel before being removed
+      current.update(imgDrum, (int)(pulseAmp*100)); // second parameter specifies the distance particles can travel before being removed
       current.render(imgDrum);
   }
   popMatrix();
 
   // draw the circle
-  fill(circleColor, 0, 255-circleColor);
-  ellipse(circleX, circleY, circleSize, circleSize);
+  // fill(circleColor, 0, 255-circleColor);
+  // ellipse(circleX, circleY, circleSize, circleSize);
   pulseAmp = 0.0;
 }
 
 // oscEvent is called whenever a message is received
+// void oscEvent(OscMessage msg) {
+//   // check if theOscMessage has an address pattern we are looking for
+//   if(msg.checkAddrPattern("/kick_amp")) {
+//     // parse theOscMessage and extract the values from the osc message arguments
+//     pulseAmp = msg.get(0).floatValue();
+//   }
+
+//   if (msg.checkAddrPattern("/note")) {
+//     int note = msg.get(0).intValue();
+//     pianoKeyboard.resetKeys();
+//     pianoKeyboard.setKeyPressed(note, true);
+//   }
+// }
+
+// oscEvent is called whenever a message is received
 void oscEvent(OscMessage msg) {
+  int instX = 0;
+  int instY = 0;
+
+  // parse theOscMessage and extract the values from the osc message arguments
+  pulseAmp = msg.get(0).floatValue();
+
   // check if theOscMessage has an address pattern we are looking for
   if(msg.checkAddrPattern("/kick_amp")) {
-    // parse theOscMessage and extract the values from the osc message arguments
-    pulseAmp = msg.get(0).floatValue();
+    instX = 530;
+    instY = 530;
   }
+  else if (msg.checkAddrPattern("/snare_amp")) {
+    instX = 450;
+    instY = 200;
+  }
+  else if (msg.checkAddrPattern("/cymbal_amp")) {
+    instX = 650;
+    instY = 50;
+  }
+
+    ParticleController pCont = new ParticleController();
+    
+    pCont.createParticles(instX, instY, 10);
+    // Add new controller to the array
+    pcs.add(pCont);
 
   if (msg.checkAddrPattern("/note")) {
     int note = msg.get(0).intValue();
@@ -102,13 +137,15 @@ void oscEvent(OscMessage msg) {
   }
 }
 
+
 void mouseClicked() {
     ParticleController pCont = new ParticleController();
     
-    translate(width/2-imgDrum.width/2, height/2+pianoKeyboard.height-imgDrum.height/2);
     pCont.createParticles(mouseX-(width/2-imgDrum.width/2), mouseY-(height/2+pianoKeyboard.height-imgDrum.height/2), 50);
     // Add new controller to the array
     pcs.add(pCont);
+
+    println(mouseX-(width/2-imgDrum.width/2), mouseY-(height/2+pianoKeyboard.height-imgDrum.height/2));
 }
 
 
