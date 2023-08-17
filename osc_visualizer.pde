@@ -1,8 +1,12 @@
 import oscP5.*;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 OscP5 oscP5;
 
-ArrayList <ParticleController> pcs = new ArrayList <ParticleController>();
+// Using List interface (instead of the original ArrayList class) and instantiating CopyOnWriteArrayList class
+//  avoids "Concurrent Modification Exception" when running many instances 
+List <ParticleController> pcs = new CopyOnWriteArrayList <ParticleController>();
 
 // declare variables for pulse amplitude, frequency, and color
 float pulseAmp;
@@ -25,7 +29,7 @@ PImage imgDrum;
 PianoKeyboard pianoKeyboard;
 
 void setup() {
-  size(1800, 900);
+  size(800, 600);
   //fullScreen();
   frameRate(30);
   smooth();

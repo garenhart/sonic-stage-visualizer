@@ -1,5 +1,5 @@
 class ParticleController {
-    ArrayList <Particle > ar = new ArrayList <Particle>();
+    List <Particle > ar = new CopyOnWriteArrayList <Particle>();
     int counter;
     
     void createParticles(float x , float y , int number) {
@@ -14,7 +14,7 @@ class ParticleController {
     // 0 - remove particles that moved out of the screen
     // >0 - remove particles that moved farther than the removeCriterion from the center
     void update(PImage pimg, int removeCriterion) {
-        ArrayList <Particle > remove = new ArrayList <Particle>();
+        List <Particle > remove = new CopyOnWriteArrayList <Particle>();
         for (Particle tmp : ar) {
             tmp.x = tmp.cx + sin(radians(tmp.angle)) * (tmp.dist * counter);
             tmp.y = tmp.cy - cos(radians(tmp.angle)) * (tmp.dist * counter);
