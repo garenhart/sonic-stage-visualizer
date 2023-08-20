@@ -29,7 +29,8 @@ PImage imgDrum;
 PianoKeyboard pianoKeyboard;
 
 void setup() {
-  size(800, 600);
+  size(1200, 600);
+  //size(1800, 900);
   //fullScreen();
   frameRate(30);
   smooth();
@@ -75,7 +76,7 @@ void draw() {
   // image(imgDrum, width/2-imgDrum.width/2, height/2-imgDrum.height/2);
 
   pushMatrix();
-  translate(width/2-imgDrum.width/2, height/2+pianoKeyboard.height-imgDrum.height/2);
+  translate(width/2-imgDrum.width/2, height/2-imgDrum.height/2+pianoKeyboard.height);
   // draw the image in the middle of the screen below the piano keyboard
   image (imgDrum, 0, 0);
 
@@ -140,8 +141,8 @@ void oscEvent(OscMessage msg) {
     // Add new controller to the array
     pcs.add(pCont);
   }
-  else if (msg.checkAddrPattern("/note")) {
-    int note = msg.get(0).intValue();
+  else if (msg.checkAddrPattern("/key")) {
+    int note = msg.get(1).intValue();
     pianoKeyboard.resetKeys();
     pianoKeyboard.setKeyPressed(note, true);
   }
