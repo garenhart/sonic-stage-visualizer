@@ -111,30 +111,36 @@ void oscEvent(OscMessage msg) {
   int instX = 0;
   int instY = 0;
 
-  // parse theOscMessage and extract the values from the osc message arguments
-  pulseAmp = msg.get(0).floatValue();
-
   // check if theOscMessage has an address pattern we are looking for
-  if(msg.checkAddrPattern("/kick_amp")) {
-    instX = 530;
-    instY = 530;
-  }
-  else if (msg.checkAddrPattern("/snare_amp")) {
-    instX = 450;
-    instY = 200;
-  }
-  else if (msg.checkAddrPattern("/cymbal_amp")) {
-    instX = 650;
-    instY = 50;
-  }
-
+  if(msg.checkAddrPattern("/drum")) {
+    switch(msg.get(0).stringValue()) {
+      case "kick":
+        instX = 530;
+        instY = 530;
+        break;
+      case "snare":
+        instX = 450;
+        instY = 200;
+        break;
+      case "cymbal":
+        instX = 650;
+        instY = 50;
+        break;
+      default:
+        instX = 0;
+        instY = 0;
+        break;
+    }
+      // parse theOscMessage and extract the values from the osc message arguments
+    pulseAmp = msg.get(1).floatValue();
+   
     ParticleController pCont = new ParticleController();
     
     pCont.createParticles(instX, instY, 10);
     // Add new controller to the array
     pcs.add(pCont);
-
-  if (msg.checkAddrPattern("/note")) {
+  }
+  else if (msg.checkAddrPattern("/note")) {
     int note = msg.get(0).intValue();
     pianoKeyboard.resetKeys();
     pianoKeyboard.setKeyPressed(note, true);
