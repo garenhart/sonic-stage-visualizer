@@ -6,6 +6,12 @@ class PianoKeyboard {
     int whiteKeyHeight;
     int blackKeyWidth;
     int blackKeyHeight;
+    int strokeColor = 0;
+    int fillColorWhite = 255;
+    int fillColorWhitePressed = 200;
+    int fillColorBlack = 0;
+    int fillColorBlackPressed = 100;
+    int strokeWeight = 1;
     PianoKey[] keys;
 
     // Constructor
@@ -50,34 +56,6 @@ class PianoKeyboard {
         //resetKeys();
     }
 
-    void renderKeys(int xOffset) {
-        int keyWhite = 0;
-        int keyBlack = 0;
-        for (int key = 0; key < keys.length; key++) {
-            if (keys[key].isWhite) {
-                keyWhite++;
-                renderWhiteKey(keyWhite, xOffset);
-            } else {
-                keyBlack++;
-                renderBlackKey(keyBlack, xOffset);
-            }
-        }
-    }
-
-    void renderWhiteKey(int key, int xOffset) {
-        int x = xOffset + key * whiteKeyWidth;
-        int y = top;
-        //fill(key.isPressed ? 255 : 255);
-        rect(x, y, whiteKeyWidth, whiteKeyHeight);
-    }
-
-    void renderBlackKey(int key, int xOffset) {
-        int x = xOffset + key * whiteKeyWidth - blackKeyWidth / 2;
-        int y = top;
-        //fill(key.isPressed ? 255 : 0);
-        rect(x, y, blackKeyWidth, blackKeyHeight);
-    }
-
     void renderWhiteKeys(int xOffset) {
         int key = -1;
         for (int octave = 0; octave < octaves; octave++) {
@@ -88,7 +66,9 @@ class PianoKeyboard {
                 if (keys[key].isPressed) {
                     println("white", key, keys[key].note, keys[key].isPressed);
                 }
-                fill(keys[key].isPressed ? 200 : 255);
+                fill(keys[key].isPressed ? fillColorWhitePressed : fillColorWhite);
+                stroke(strokeColor);
+                strokeWeight(strokeWeight);
                 rect(x, y, whiteKeyWidth, whiteKeyHeight);
             }
         }
@@ -106,7 +86,9 @@ class PianoKeyboard {
                         println("black", key, keys[key].note, keys[key].isPressed);
                     }
 
-                    fill(keys[key].isPressed ? 100 : 0);
+                    fill(keys[key].isPressed ? fillColorBlackPressed : fillColorBlack);
+                    stroke(strokeColor);
+                    strokeWeight(strokeWeight);
                     rect(x, y, blackKeyWidth, blackKeyHeight);
                 }
             }
