@@ -20,6 +20,8 @@ float circleSize;
 float circleMinSize;
 float circleMaxSize;
 
+int bkColor = 100;
+
 // declare variables for circle color
 int circleColor;
 
@@ -42,7 +44,7 @@ void setup() {
   pianoKeyboard = new PianoKeyboard("top", width, height, 10, 2, 5);
 
   //imgDrum = loadImage("comic-jazz-drum-800.png");
-  imgDrum = loadImage("black-blue-yellow-drum.png");
+  imgDrum = loadImage("red-blue-yellow-drum.png");
 
   imgDrum.loadPixels();
 
@@ -61,7 +63,7 @@ void setup() {
 // which grows and shrinks in size based on the value of pulseAmp
 // and changes color  between blue and red based on the value of pulseAmp
 void draw() {
-  background(100);
+  background(bkColor);
   
   // calculate the size of the circle based on pulseAmp
   circleSize = map(pulseAmp, 0, 1, circleMinSize, circleMaxSize);
@@ -135,7 +137,7 @@ void oscEvent(OscMessage msg) {
       // parse theOscMessage and extract the values from the osc message arguments
     pulseAmp = msg.get(1).floatValue();
    
-    ParticleController pCont = new ParticleController();
+    ParticleController pCont = new ParticleController(bkColor);
     
     pCont.createParticles(instX, instY, 10);
     // Add new controller to the array
@@ -150,7 +152,7 @@ void oscEvent(OscMessage msg) {
 
 
 void mouseClicked() {
-    ParticleController pCont = new ParticleController();
+    ParticleController pCont = new ParticleController(bkColor);
     
     pCont.createParticles(mouseX-(width/2-imgDrum.width/2), mouseY-(height/2+pianoKeyboard.height-imgDrum.height/2), 50);
     // Add new controller to the array
