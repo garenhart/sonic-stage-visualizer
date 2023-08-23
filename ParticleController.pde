@@ -3,12 +3,14 @@ class ParticleController {
     int counter;
     int bkColor;
     int colorAdjust;
+    int travelDistance;
     
     // Constructor
-    ParticleController(int bkColor) {
+    ParticleController(int bkColor, float amp) {
         counter = 0;
         colorAdjust = 50;
         this.bkColor = bkColor;
+        this.travelDistance = (int)(amp*100);
     }
 
     void createParticles(float x , float y , int number) {
@@ -20,17 +22,17 @@ class ParticleController {
 
     // Update the position of the particles
     // Remove those particles that meet the remove criterion
-    // 0 - remove particles that moved out of the screen
-    // >0 - remove particles that moved farther than the removeCriterion from the center
-    void update(PImage pimg, int removeCriterion) {
+    // -1 - remove particles that moved out of the screen
+    // >=0 - remove particles that moved farther than the travelDistance from the center
+    void update(PImage pimg) {
         List <Particle > remove = new CopyOnWriteArrayList <Particle>();
         for (Particle tmp : ar) {
             tmp.x = tmp.cx + sin(radians(tmp.angle)) * (tmp.dist * counter);
             tmp.y = tmp.cy - cos(radians(tmp.angle)) * (tmp.dist * counter);
             
-            if (removeCriterion > 0) {
-                // Add those particles that moved farther than the removeCriterion from the center to "remove" list
-                if (dist(tmp.x, tmp.y, tmp.cx, tmp.cy) > removeCriterion) {
+            if (travelDistance > -1) {
+                // Add those particles that moved farther than the travelDistance from the center to "remove" list
+                if (dist(tmp.x, tmp.y, tmp.cx, tmp.cy) > travelDistance) {
                     remove.add(tmp);
                 }
             }
@@ -80,7 +82,6 @@ class ParticleController {
 
      // Adjust the color of the particles to make them more visible
      float adjustColor(float c) {
-        println("Color: " + c);
         return c + colorAdjust > 255 ? 255 : c + colorAdjust;
      }
 }

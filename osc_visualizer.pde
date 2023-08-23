@@ -59,9 +59,6 @@ void setup() {
   circleColor = 0;
 }
 
-// draw a circle of circleMinSize at the center of the screen
-// which grows and shrinks in size based on the value of pulseAmp
-// and changes color  between blue and red based on the value of pulseAmp
 void draw() {
   background(bkColor);
   
@@ -83,7 +80,7 @@ void draw() {
   image (imgDrum, 0, 0);
 
   for (ParticleController current : pcs) {
-      current.update(imgDrum, (int)(pulseAmp*100)); // second parameter specifies the distance particles can travel before being removed
+      current.update(imgDrum);
       current.render(imgDrum);
   }
   popMatrix();
@@ -137,7 +134,7 @@ void oscEvent(OscMessage msg) {
       // parse theOscMessage and extract the values from the osc message arguments
     pulseAmp = msg.get(1).floatValue();
    
-    ParticleController pCont = new ParticleController(bkColor);
+    ParticleController pCont = new ParticleController(bkColor, pulseAmp);
     
     pCont.createParticles(instX, instY, 10);
     // Add new controller to the array
@@ -152,7 +149,7 @@ void oscEvent(OscMessage msg) {
 
 
 void mouseClicked() {
-    ParticleController pCont = new ParticleController(bkColor);
+    ParticleController pCont = new ParticleController(bkColor, -1);
     
     pCont.createParticles(mouseX-(width/2-imgDrum.width/2), mouseY-(height/2+pianoKeyboard.height-imgDrum.height/2), 50);
     // Add new controller to the array
