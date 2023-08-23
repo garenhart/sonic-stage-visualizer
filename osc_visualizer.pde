@@ -136,7 +136,7 @@ void oscEvent(OscMessage msg) {
    
     ParticleController pCont = new ParticleController(bkColor, pulseAmp);
     
-    pCont.createParticles(instX, instY, 10);
+    pCont.createParticles(instX, instY, (int)(pulseAmp*20));
     // Add new controller to the array
     pcs.add(pCont);
   }
