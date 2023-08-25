@@ -31,9 +31,9 @@ PImage imgDrum;
 PianoKeyboard pianoKeyboard;
 
 void setup() {
-  size(1200, 600);
+  //size(1200, 600);
   //size(1800, 900);
-  //fullScreen();
+  fullScreen();
   frameRate(30);
   smooth();
   //noStroke();
