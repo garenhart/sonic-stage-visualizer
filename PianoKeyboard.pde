@@ -7,10 +7,10 @@ class PianoKeyboard {
     int blackKeyWidth;
     int blackKeyHeight;
     int strokeColor = 0;
-    int fillColorWhite = 255;
-    int fillColorWhitePressed = 200;
-    int fillColorBlack = 0;
-    int fillColorBlackPressed = 100;
+    color fillColorWhite = 255;
+    color fillColorWhitePressed = 200;
+    color fillColorBlack = 0;
+    color fillColorBlackPressed = 100;
     int strokeWeight = 1;
     PianoKey[] keys;
 
@@ -63,9 +63,6 @@ class PianoKeyboard {
                 int x = xOffset + octave * 7 * whiteKeyWidth + i * whiteKeyWidth;
                 int y = top;
                 key = nextWhiteKeyIndex(key);
-                if (keys[key].isPressed) {
-                    println("white", key, keys[key].note, keys[key].isPressed);
-                }
                 fill(keys[key].isPressed ? fillColorWhitePressed : fillColorWhite);
                 stroke(strokeColor);
                 strokeWeight(strokeWeight);
@@ -82,10 +79,6 @@ class PianoKeyboard {
                      int x = xOffset + octave * 7 * whiteKeyWidth + i * whiteKeyWidth - blackKeyWidth / 2;
                     int y = top;
                     key = nextBlackKeyIndex(key);
-                    if (keys[key].isPressed) {
-                        println("black", key, keys[key].note, keys[key].isPressed);
-                    }
-
                     fill(keys[key].isPressed ? fillColorBlackPressed : fillColorBlack);
                     stroke(strokeColor);
                     strokeWeight(strokeWeight);
@@ -133,11 +126,32 @@ class PianoKeyboard {
     }
 
     // set key pressed for a given note
-    void setKeyPressed(int note, boolean isPressed) {
+    void setKeyPressed(String inst, int note, float velocity) {
         int index = keyIndex(note);
         if (index >= 0 && index < keys.length) {
-            keys[index].isPressed = isPressed;
-            println(index, keys[index].note, keys[index].isPressed);
+            keys[index].isPressed = true;
+            setPressedKeyColor(inst, (int)(velocity*255));
+        }
+    }
+
+    void setPressedKeyColor(String inst, int velocity) {
+        switch (inst) {
+            case "bass":
+                fillColorWhitePressed = color(127, 200, 80, velocity);
+                fillColorBlackPressed = color(64, 100, 40,  velocity);
+                break;
+            case "chord":
+                fillColorWhitePressed = color(200, 200, 200,  velocity);
+                fillColorBlackPressed = color(100, 100, 100,  velocity);
+                break;
+            case "solo":
+                fillColorWhitePressed = color(255, 127, 80,  velocity);
+                fillColorBlackPressed = color(100, 64, 40,  velocity);
+                break;
+            default:
+                fillColorWhitePressed = 255 - velocity;
+                fillColorBlackPressed = 100 + velocity;
+                break;
         }
     }
 

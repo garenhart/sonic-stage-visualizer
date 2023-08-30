@@ -31,9 +31,9 @@ PImage imgDrum;
 PianoKeyboard pianoKeyboard;
 
 void setup() {
-  //size(1200, 600);
+  size(1200, 600);
   //size(1800, 900);
-  fullScreen();
+  //fullScreen();
   frameRate(30);
   smooth();
   //noStroke();
@@ -141,12 +141,13 @@ void oscEvent(OscMessage msg) {
     pcs.add(pCont);
   }
   else if (msg.checkAddrPattern("/key")) {
+    String inst = msg.get(0).stringValue();
     int note = msg.get(1).intValue();
+    float amp = msg.get(2).floatValue();
     pianoKeyboard.resetKeys();
-    pianoKeyboard.setKeyPressed(note, true);
+    pianoKeyboard.setKeyPressed(inst, note, amp);
   }
 }
-
 
 void mouseClicked() {
     ParticleController pCont = new ParticleController(bkColor, -1);
