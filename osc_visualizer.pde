@@ -38,7 +38,7 @@ void setup() {
   smooth();
   //noStroke();
 
-  // start oscP5, listening for incoming messages at port 12000
+  // start oscP5, listening for incoming messages at port 8000
   oscP5 = new OscP5(this, 8000);
 
   pianoKeyboard = new PianoKeyboard("top", width, height, 10, 2, 5);
