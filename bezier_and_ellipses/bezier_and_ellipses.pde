@@ -22,10 +22,15 @@ void setup() {
 }
 
 void draw() {
-    //fill(0, 40);
-    //rect( - 1, -1, width + 1, height + 1);
     background(0, 40);
     
+    renderSound(se);
+    
+    se.reset();
+    delta += 0.5;
+}
+
+void renderSound(SoundEvent se) {
     switch(se.instrument) {
         case "kick":
              break;
@@ -53,11 +58,8 @@ void draw() {
         ellipse(x, y, 5, 5);
         ellipse(x2, y2, 5, 5);
     }
-    
-    se.reset();
-    delta += 0.5;
-}
 
+}
 
 void oscEvent(OscMessage msg) {
     if (msg.checkAddrPattern("/drum")) {
