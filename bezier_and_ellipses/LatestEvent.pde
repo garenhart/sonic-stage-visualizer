@@ -1,4 +1,4 @@
-class LatestEvent {
+class SoundEvent {
     String instrument = "";
     int note = 0;
     float amp = 0;
