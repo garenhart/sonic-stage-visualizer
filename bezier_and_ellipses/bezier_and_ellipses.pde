@@ -7,7 +7,7 @@ OscP5 oscP5;
 SoundEvent se;
 
 float minX = 100;
-float amount = 20, num;
+float step = 20, delta;
 color cStroke = color(0, 150, 255, 100);
 
 void setup() {
@@ -39,12 +39,12 @@ void draw() {
     float maxX = minX + map(se.amp, 0, 1, 1, 250);
     
     translate(width / 2, height / 2);
-    for (int i = 0; i < 360; i += amount) {
-        float x = sin(radians(i + num)) * maxX;
-        float y = cos(radians(i + num)) * maxX;
+    for (int i = 0; i < 360; i += step) {
+        float x = sin(radians(i + delta)) * maxX;
+        float y = cos(radians(i + delta)) * maxX;
         
-        float x2 = sin(radians(i + amount - num)) * maxX;
-        float y2 = cos(radians(i + amount - num)) * maxX;
+        float x2 = sin(radians(i + step - delta)) * maxX;
+        float y2 = cos(radians(i + step - delta)) * maxX;
         noFill();
         bezier(x, y, x - x2, y - y2, x2 - x, y2 - y, x2, y2);
         bezier(x, y, x + x2, y + y2, x2 + x, y2 + y, x2, y2);
@@ -54,7 +54,7 @@ void draw() {
     }
     
     se.reset();
-    num += 0.5;
+    delta += 0.5;
 }
 
 
