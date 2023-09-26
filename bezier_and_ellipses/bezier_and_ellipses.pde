@@ -16,14 +16,15 @@ void setup() {
 
     size(640, 640);
     stroke(cStroke);
-    strokeWeight(1);
+    strokeWeight(2);
 
     se = new SoundEvent();
 }
 
 void draw() {
-    fill(0, 40);
-    rect( - 1, -1, width + 1, height + 1);
+    //fill(0, 40);
+    //rect( - 1, -1, width + 1, height + 1);
+    background(0, 40);
     
     switch(se.instrument) {
         case "kick":
