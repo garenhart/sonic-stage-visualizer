@@ -6,19 +6,21 @@ OscP5 oscP5;
 
 SoundEvent se;
 
-float minX = 100;
-float step = 20, delta;
+float minX = 200;
+float step = 10, delta;
 color cStroke = color(0, 150, 255, 100);
 
 void setup() {
     // start oscP5, listening for incoming messages at port 8000
     oscP5 = new OscP5(this, 8000);
 
-    size(640, 640);
+    //size(640, 640);
+    fullScreen();
     stroke(cStroke);
     strokeWeight(2);
 
     se = new SoundEvent();
+    frameRate(10); // Slow down the frame rate since my computer is not handling the default 60fps very well
 }
 
 void draw() {
@@ -31,27 +33,20 @@ void draw() {
 }
 
 void renderSound(SoundEvent se) {
-    switch(se.instrument) {
-        case "kick":
-             break;
-        case "snare":
-            break;
-        case "cymbal":
-            break;
-        default:
-            break;
-    }
+
     
-    float maxX = minX + map(se.amp, 0, 1, 1, 250);
+    float maxX = minX; //+ map(se.amp, 0, 1, 1, 100);
     
     translate(width / 2, height / 2);
-    for (int i = 0; i < 360; i += step) {
+    for (int i = se.minDeg; i < se.maxDeg; i += step) {
         float x = sin(radians(i + delta)) * maxX;
         float y = cos(radians(i + delta)) * maxX;
         
         float x2 = sin(radians(i + step - delta)) * maxX;
         float y2 = cos(radians(i + step - delta)) * maxX;
         noFill();
+        stroke(se.c);
+        strokeWeight(1 + se.amp*20);
         bezier(x, y, x - x2, y - y2, x2 - x, y2 - y, x2, y2);
         bezier(x, y, x + x2, y + y2, x2 + x, y2 + y, x2, y2);
         fill(255, 150, 0);
