@@ -9,6 +9,9 @@ SoundEvent se;
 float minX = 200;
 float step = 10, delta;
 color cStroke = color(0, 150, 255, 100);
+color cEllipse1 = color(255, 150, 0);
+color cEllipse2 = color(255, 255, 0);
+color cEllipse3 = color(0, 255, 255);
 
 void setup() {
     // start oscP5, listening for incoming messages at port 8000
@@ -49,9 +52,15 @@ void renderSound(SoundEvent se) {
         strokeWeight(1 + se.amp*20);
         bezier(x, y, x - x2, y - y2, x2 - x, y2 - y, x2, y2);
         bezier(x, y, x + x2, y + y2, x2 + x, y2 + y, x2, y2);
-        fill(255, 150, 0);
+        
+        fill(cEllipse1);
         ellipse(x, y, 5, 5);
         ellipse(x2, y2, 5, 5);
+
+        fill(cEllipse2);
+        ellipse(x2 - x, y2 - y, 5, 5);
+        fill(cEllipse3);
+        ellipse(x + x2, y + y2, 5, 5);
     }
 
 }
