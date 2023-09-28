@@ -1,11 +1,15 @@
 class SoundEvent {
-    String instrument = "";
-    int note = 0;
-    float amp = 0;
-    int minDeg = 0;
-    int maxDeg = 360;
-    color c = color(0, 150, 255, 100);
+    String instrument;
+    int note;
+    float amp;
+    int minDeg;
+    int maxDeg;
+    color c;
 
+    SoundEvent() {
+        reset();
+    }
+    
     void reset() {
         instrument = "";
         note = 0;
