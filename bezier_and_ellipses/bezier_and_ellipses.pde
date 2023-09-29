@@ -53,12 +53,15 @@ void renderSound(SoundEvent se) {
         bezier(x, y, x - x2, y - y2, x2 - x, y2 - y, x2, y2);
         bezier(x, y, x + x2, y + y2, x2 + x, y2 + y, x2, y2);
         
+        bezier(x - x2, y - y2, x, y, x2, y2, x2 - x, y2 - y);
+        bezier(x + x2, y + y2, x, y, x2, y2, x2 + x, y2 + y);
+
         fill(cEllipse1);
         ellipse(x, y, 5, 5);
         ellipse(x2, y2, 5, 5);
 
         fill(cEllipse2);
-        ellipse(x2 - x, y2 - y, 5, 5);
+        ellipse(x - x2, y - y2, 5, 5);
         fill(cEllipse3);
         ellipse(x + x2, y + y2, 5, 5);
     }
