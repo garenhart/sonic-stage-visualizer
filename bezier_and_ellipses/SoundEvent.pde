@@ -28,17 +28,17 @@ class SoundEvent {
             case "kick":
                 minDeg = 0;
                 maxDeg = 120;
-                c = color(255, 0, 0, 100);
+                c = color(255, 150, 0);
                 break;
             case "snare":
                 minDeg = 120;
                 maxDeg = 240;
-                c = color(0, 255, 0, 100);
+                c = color(255, 255, 255);
                 break;
             case "cymbal":
                 minDeg = 240;
                 maxDeg = 360;
-                c = color(0, 0, 255, 100);
+                c = color(0, 255, 0);
                 break;
             default:
                 break;

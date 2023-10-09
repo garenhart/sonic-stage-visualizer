@@ -56,27 +56,19 @@ void renderSound(SoundEvent se) {
         bezier(x + x2, y + y2, x, y, x2, y2, x2 + x, y2 + y);
         
         
-        
+        fill(se.c);
         // Draw the ellipses of radius 5 + the amplitude of the sound
         if (se.instrument.equals("kick")) {
             //println(se.instrument);
-            fill(cEllipse1);
             ellipse(x, y, 5 + se.amp * 20, 5 + se.amp * 20);
             ellipse(x2, y2, 5 + se.amp * 20, 5 + se.amp * 20);
         }
         
-        //ellipse(x, y, 5, 5);
-        //ellipse(x2, y2, 5, 5);
-        
         if (se.instrument.equals("cymbal")) {
-            
-            fill(cEllipse2);
             ellipse(x - x2, y - y2, 5 + se.amp * 5, 5 + se.amp * 5);
         }
         
         if (se.instrument.equals("snare")) {
-            
-            fill(cEllipse3);
             ellipse(x + x2, y + y2, 5 + se.amp * 5, 5 + se.amp * 5);
         }
     }
