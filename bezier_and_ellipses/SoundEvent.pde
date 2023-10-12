@@ -2,10 +2,8 @@ class SoundEvent {
     String instrument;
     int note;
     float amp;
-    int minDeg;
-    int maxDeg;
     color c;
-
+    
     SoundEvent() {
         reset();
     }
@@ -14,38 +12,26 @@ class SoundEvent {
         instrument = "";
         note = 0;
         amp = 0;
-        minDeg = 0;
-        maxDeg = 360;
         c = color(0, 150, 255, 100);
     }
-
+    
     void set(String instrument, int note, float amp) {
         this.instrument = instrument;
         this.note = note;
         this.amp = amp;
-
+                
         switch(se.instrument) {
             case "kick":
-                minDeg = 0;
-                maxDeg = 120;
-                c = color(255, 150, 0);
+                c = color(#CC813F);
                 break;
             case "snare":
-                minDeg = 120;
-                maxDeg = 240;
-                c = color(255, 255, 255);
+                c = color(#FFC66D);
                 break;
             case "cymbal":
-                minDeg = 240;
-                maxDeg = 360;
-                c = color(0, 255, 0);
+                c = color(#6A8759);
                 break;
             default:
                 break;
-        }
-
-        // minDeg = 0;
-        // maxDeg = 360;
-        // //println(instrument + " " + note + " " + amp);
-    }
+        }    
+    }        
 }
