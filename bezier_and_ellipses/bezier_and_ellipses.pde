@@ -6,7 +6,7 @@ OscP5 oscP5;
 
 SoundEvent se;
 
-float minX = 200;
+float minX = 260;
 float step = 10, delta;
 color cStroke = color(0, 150, 255, 100);
 color cEllipse1 = color(255, 150, 0);
@@ -17,8 +17,8 @@ void setup() {
     // start oscP5, listening for incoming messages at port 8000
     oscP5 = new OscP5(this, 8000);
     
-    size(800, 800);
-    //fullScreen();
+    //size(800, 800);
+    fullScreen();
     stroke(cStroke);
     strokeWeight(2);
     
@@ -37,17 +37,19 @@ void draw() {
 
 void renderSound(SoundEvent se) {
     float maxX = minX; //+ map(se.amp, 0, 1, 1, 100);
+    float x, y, x2, y2;
+    float size = map(se.amp, 0, 1, 10, 30);
     
     translate(width / 2, height / 2);
     //for (int i = se.minDeg; i < se.maxDeg; i += step) {
     for (int i = 0; i < 360; i += step) {
-        float x = sin(radians(i + delta)) * maxX;
-        float y = cos(radians(i + delta)) * maxX;
-        
-        float x2 = sin(radians(i + step - delta)) * maxX;
-        float y2 = cos(radians(i + step - delta)) * maxX;
+        x = sin(radians(i + delta)) * maxX;
+        y = cos(radians(i + delta)) * maxX;
+                x2 = sin(radians(i + step - delta)) * maxX;
+        y2 = cos(radians(i + step - delta)) * maxX;
         noFill();
-        stroke(cStroke);
+        //stroke(cStroke);
+        stroke(se.c);
         //strokeWeight(1 + se.amp*20);
         bezier(x, y, x - x2, y - y2, x2 - x, y2 - y, x2, y2);
         bezier(x, y, x + x2, y + y2, x2 + x, y2 + y, x2, y2);
@@ -56,20 +58,21 @@ void renderSound(SoundEvent se) {
         bezier(x + x2, y + y2, x, y, x2, y2, x2 + x, y2 + y);
         
         
-        fill(se.c);
+        fill(complementaryColor(se.c));
+        
         // Draw the ellipses of radius 5 + the amplitude of the sound
         if (se.instrument.equals("kick")) {
             //println(se.instrument);
-            ellipse(x, y, 5 + se.amp * 20, 5 + se.amp * 20);
-            ellipse(x2, y2, 5 + se.amp * 20, 5 + se.amp * 20);
+            ellipse(x, y, size, size);
+            ellipse(x2, y2, size, size);
         }
         
         if (se.instrument.equals("cymbal")) {
-            ellipse(x - x2, y - y2, 5 + se.amp * 5, 5 + se.amp * 5);
+            ellipse(x - x2, y - y2, size, size);
         }
         
         if (se.instrument.equals("snare")) {
-            ellipse(x + x2, y + y2, 5 + se.amp * 5, 5 + se.amp * 5);
+            ellipse(x + x2, y + y2, size, size);
         }
     }
     
@@ -82,4 +85,8 @@ void oscEvent(OscMessage msg) {
     else if (msg.checkAddrPattern("/key")) {
         se.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue());
     }
+}
+
+color complementaryColor(color c) {
+    return color(255-red(c), 255-green(c), 255-blue(c));
 }
