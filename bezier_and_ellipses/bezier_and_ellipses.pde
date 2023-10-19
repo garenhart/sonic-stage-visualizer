@@ -38,7 +38,7 @@ void draw() {
 void renderSound(SoundEvent se) {
     float maxX = minX; //+ map(se.amp, 0, 1, 1, 100);
     float x, y, x2, y2;
-    float size = map(se.amp, 0, 1, 10, 30);
+    float size = map(se.amp, 0, 1, 5, 15);
     
     translate(width / 2, height / 2);
     //for (int i = se.minDeg; i < se.maxDeg; i += step) {
