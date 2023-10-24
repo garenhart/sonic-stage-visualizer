@@ -17,8 +17,8 @@ void setup() {
     // start oscP5, listening for incoming messages at port 8000
     oscP5 = new OscP5(this, 8000);
     
-    //size(800, 800);
-    fullScreen();
+    size(800, 800);
+    //fullScreen();
     stroke(cStroke);
     strokeWeight(2);
     
@@ -33,23 +33,24 @@ void draw() {
     
     se.reset();
     delta += 0.5;
+    if (delta > 360) delta = 0;
 }
 
 void renderSound(SoundEvent se) {
     float maxX = minX; //+ map(se.amp, 0, 1, 1, 100);
     float x, y, x2, y2;
     float size = map(se.amp, 0, 1, 5, 15);
+        //stroke(cStroke);
+        stroke(se.c);
     
     translate(width / 2, height / 2);
     //for (int i = se.minDeg; i < se.maxDeg; i += step) {
     for (int i = 0; i < 360; i += step) {
         x = sin(radians(i + delta)) * maxX;
         y = cos(radians(i + delta)) * maxX;
-                x2 = sin(radians(i + step - delta)) * maxX;
+        x2 = sin(radians(i + step - delta)) * maxX;
         y2 = cos(radians(i + step - delta)) * maxX;
         noFill();
-        //stroke(cStroke);
-        stroke(se.c);
         //strokeWeight(1 + se.amp*20);
         bezier(x, y, x - x2, y - y2, x2 - x, y2 - y, x2, y2);
         bezier(x, y, x + x2, y + y2, x2 + x, y2 + y, x2, y2);
@@ -76,6 +77,14 @@ void renderSound(SoundEvent se) {
         }
     }
     
+     //if (se.instrument.equals("solo")) {
+    if (se.note > 0) {
+        //stroke(cStroke);
+        fill(cEllipse1);
+        textSize(64);
+        textAlign(CENTER, CENTER);
+        text(noteName(se.note), 0, 0); 
+    }  
 }
 
 void oscEvent(OscMessage msg) {
@@ -88,5 +97,12 @@ void oscEvent(OscMessage msg) {
 }
 
 color complementaryColor(color c) {
-    return color(255-red(c), 255-green(c), 255-blue(c));
+    return color(255 - red(c), 255 - green(c), 255 - blue(c));
+}
+
+// Method to convert MIDI note number to note name
+String noteName(int note) {
+    String[] notes = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+    println(note, notes[note % 12]);
+    return notes[note % 12];
 }
