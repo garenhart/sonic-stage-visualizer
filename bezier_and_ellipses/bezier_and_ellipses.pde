@@ -4,7 +4,7 @@ import oscP5.*;
 
 OscP5 oscP5;
 
-SoundEvent se;
+SoundEvent kick, snare, cymbal, solo, bass, chord;
 
 float minX = 260;
 float step = 10, delta;
@@ -17,32 +17,35 @@ void setup() {
     // start oscP5, listening for incoming messages at port 8000
     oscP5 = new OscP5(this, 8000);
     
-    size(800, 800);
-    //fullScreen();
+    //size(800, 800);
+    fullScreen();
     stroke(cStroke);
     strokeWeight(2);
     
-    se = new SoundEvent();
-    frameRate(10); // Slow down the frame rate since my computer is not handling the default 60fps very well
+    kick = new SoundEvent(cStroke, color(#CC813F));
+    snare = new SoundEvent(cStroke, color(#FFC66D));
+    cymbal = new SoundEvent(cStroke, color(#6A8759));
+
+    solo = new SoundEvent(cStroke, color(#6A8759));
+
+    //frameRate(10); // Slow down the frame rate since my computer is not handling the default 60fps very well
 }
 
 void draw() {
     background(0, 40);
     
-    renderSound(se);
-    
-    se.reset();
+    renderSound();
+        
     delta += 0.5;
     if (delta > 360) delta = 0;
 }
 
-void renderSound(SoundEvent se) {
+void renderSound() {
     float maxX = minX; //+ map(se.amp, 0, 1, 1, 100);
     float x, y, x2, y2;
-    float size = map(se.amp, 0, 1, 5, 15);
-        //stroke(cStroke);
-        stroke(se.c);
-    
+
+    //stroke(cStroke);
+
     translate(width / 2, height / 2);
     //for (int i = se.minDeg; i < se.maxDeg; i += step) {
     for (int i = 0; i < 360; i += step) {
@@ -52,47 +55,62 @@ void renderSound(SoundEvent se) {
         y2 = cos(radians(i + step - delta)) * maxX;
         noFill();
         //strokeWeight(1 + se.amp*20);
+
+        // set stroke color between cStroke and kick.c
+        // depending on value of kick.amp
+        stroke(kick.lintColor());
         bezier(x, y, x - x2, y - y2, x2 - x, y2 - y, x2, y2);
         bezier(x, y, x + x2, y + y2, x2 + x, y2 + y, x2, y2);
         
+        stroke(snare.lintColor());
         bezier(x - x2, y - y2, x, y, x2, y2, x2 - x, y2 - y);
+
+        stroke(cymbal.lintColor());
         bezier(x + x2, y + y2, x, y, x2, y2, x2 + x, y2 + y);
         
+        println("kick amp: " + kick.amp);
+        println("kick size: " + kick.size());       
+        fill(complementaryColor(kick.c2));
+        //println(se.instrument);
+        ellipse(x, y, kick.size(), kick.size());
+        ellipse(x2, y2, kick.size(), kick.size());
         
-        fill(complementaryColor(se.c));
+        fill(complementaryColor(snare.c2));
+        ellipse(x - x2, y - y2, snare.size(), snare.size());
+    
         
-        // Draw the ellipses of radius 5 + the amplitude of the sound
-        if (se.instrument.equals("kick")) {
-            //println(se.instrument);
-            ellipse(x, y, size, size);
-            ellipse(x2, y2, size, size);
-        }
+        fill(complementaryColor(cymbal.c2));
+        ellipse(x + x2, y + y2, cymbal.size(), cymbal.size());
         
-        if (se.instrument.equals("cymbal")) {
-            ellipse(x - x2, y - y2, size, size);
-        }
-        
-        if (se.instrument.equals("snare")) {
-            ellipse(x + x2, y + y2, size, size);
-        }
     }
     
      //if (se.instrument.equals("solo")) {
-    if (se.note > 0) {
+    if (solo.note > 0) {
         //stroke(cStroke);
-        fill(cEllipse1);
+        fill(solo.lintColor());
         textSize(64);
         textAlign(CENTER, CENTER);
-        text(noteName(se.note), 0, 0); 
+        text(noteName(solo.note), 0, 0); 
     }  
 }
 
 void oscEvent(OscMessage msg) {
     if (msg.checkAddrPattern("/drum")) {
-        se.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue());
+        if (msg.get(0).stringValue().equals("kick")) {
+            kick.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue());
+        }
+        else if (msg.get(0).stringValue().equals("snare")) {
+            snare.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue());
+        }
+        else if (msg.get(0).stringValue().equals("cymbal")) {
+            cymbal.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue());
+        }
+        //se.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue());
     }
     else if (msg.checkAddrPattern("/key")) {
-        se.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue());
+        if (msg.get(0).stringValue().equals("solo")) {
+            solo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue());
+        }
     }
 }
 

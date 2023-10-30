@@ -2,9 +2,11 @@ class SoundEvent {
     String instrument;
     int note;
     float amp;
-    color c;
+    color c1, c2;
     
-    SoundEvent() {
+    SoundEvent(color c1, color c2) {
+        this.c1 = c1;
+        this.c2 = c2;
         reset();
     }
     
@@ -12,26 +14,21 @@ class SoundEvent {
         instrument = "";
         note = 0;
         amp = 0;
-        c = color(0, 150, 255, 100);
     }
     
     void set(String instrument, int note, float amp) {
         this.instrument = instrument;
         this.note = note;
-        this.amp = amp;
-                
-        switch(se.instrument) {
-            case "kick":
-                c = color(#CC813F);
-                break;
-            case "snare":
-                c = color(#FFC66D);
-                break;
-            case "cymbal":
-                c = color(#6A8759);
-                break;
-            default:
-                break;
-        }    
-    }        
+        this.amp = amp;             
+    }
+
+    float size() {
+        return map(amp, 0, 1, 0, 20);
+    }
+
+    // Let's call this method lintColor, where lint means linear interpolation,
+    // and call the original lerpColor, where lerp means linear interpolation :)
+    color lintColor() {
+        return lerpColor(c1, c2, amp);
+    }       
 }
