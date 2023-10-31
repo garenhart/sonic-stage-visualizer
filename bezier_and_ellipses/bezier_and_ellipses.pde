@@ -8,7 +8,8 @@ SoundEvent kick, snare, cymbal, solo, bass, chord;
 
 float minX = 260;
 float step = 10, delta;
-color cStroke = color(0, 150, 255, 100);
+//color cStroke = color(0, 150, 255, 100);
+color cStroke = color(0, 102, 153);
 color cEllipse1 = color(255, 150, 0);
 color cEllipse2 = color(255, 255, 255);
 color cEllipse3 = color(0, 255, 0);
@@ -22,9 +23,9 @@ void setup() {
     stroke(cStroke);
     strokeWeight(2);
     
-    kick = new SoundEvent(cStroke, color(#CC813F));
-    snare = new SoundEvent(cStroke, color(#FFC66D));
-    cymbal = new SoundEvent(cStroke, color(#6A8759));
+    kick = new SoundEvent(cStroke, color(204, 102, 0));
+    snare = new SoundEvent(cStroke, color(136, 102, 51));
+    cymbal = new SoundEvent(cStroke, color(68, 102, 102));
 
     solo = new SoundEvent(cStroke, color(#6A8759));
 
