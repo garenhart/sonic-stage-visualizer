@@ -10,9 +10,6 @@ float minX = 260;
 float step = 10, delta;
 //color cStroke = color(0, 150, 255, 100);
 color cStroke = color(0, 102, 153);
-color cEllipse1 = color(255, 150, 0);
-color cEllipse2 = color(255, 255, 255);
-color cEllipse3 = color(0, 255, 0);
 
 void setup() {
     // start oscP5, listening for incoming messages at port 8000
@@ -54,32 +51,30 @@ void renderSound() {
         y = cos(radians(i + delta)) * maxX;
         x2 = sin(radians(i + step - delta)) * maxX;
         y2 = cos(radians(i + step - delta)) * maxX;
-        noFill();
         //strokeWeight(1 + se.amp*20);
 
         // set stroke color between cStroke and kick.c
         // depending on value of kick.amp
         stroke(kick.lintColor());
+        noFill();
         bezier(x, y, x - x2, y - y2, x2 - x, y2 - y, x2, y2);
         bezier(x, y, x + x2, y + y2, x2 + x, y2 + y, x2, y2);
-        
-        stroke(snare.lintColor());
-        bezier(x - x2, y - y2, x, y, x2, y2, x2 - x, y2 - y);
 
-        stroke(cymbal.lintColor());
-        bezier(x + x2, y + y2, x, y, x2, y2, x2 + x, y2 + y);
-        
-        println("kick amp: " + kick.amp);
-        println("kick size: " + kick.size());       
         fill(complementaryColor(kick.c2));
-        //println(se.instrument);
         ellipse(x, y, kick.size(), kick.size());
         ellipse(x2, y2, kick.size(), kick.size());
-        
+
+        stroke(snare.lintColor());
+        noFill();
+        bezier(x - x2, y - y2, x, y, x2, y2, x2 - x, y2 - y);
+
         fill(complementaryColor(snare.c2));
         ellipse(x - x2, y - y2, snare.size(), snare.size());
-    
-        
+
+        stroke(cymbal.lintColor());
+        noFill();
+        bezier(x + x2, y + y2, x, y, x2, y2, x2 + x, y2 + y);
+       
         fill(complementaryColor(cymbal.c2));
         ellipse(x + x2, y + y2, cymbal.size(), cymbal.size());
         
