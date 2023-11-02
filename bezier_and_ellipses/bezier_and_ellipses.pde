@@ -7,7 +7,7 @@ OscP5 oscP5;
 SoundEvent kick, snare, cymbal, solo, bass, chord;
 
 float minX = 260;
-float step = 10, delta;
+float step = 20, delta;
 //color cStroke = color(0, 150, 255, 100);
 color cStroke = color(0, 102, 153);
 
@@ -15,8 +15,8 @@ void setup() {
     // start oscP5, listening for incoming messages at port 8000
     oscP5 = new OscP5(this, 8000);
     
-    //size(800, 800);
-    fullScreen();
+    size(800, 800);
+    //fullScreen();
     stroke(cStroke);
     strokeWeight(2);
     
@@ -25,6 +25,8 @@ void setup() {
     cymbal = new SoundEvent(cStroke, color(68, 102, 102));
 
     solo = new SoundEvent(cStroke, color(#6A8759));
+    bass = new SoundEvent(cStroke, color(#6A8759));
+    chord = new SoundEvent(cStroke, color(#6A8759));
 
     //frameRate(10); // Slow down the frame rate since my computer is not handling the default 60fps very well
 }
@@ -44,6 +46,9 @@ void renderSound() {
 
     //stroke(cStroke);
 
+    step = map(kick.amp+snare.amp+cymbal.amp, 0, 3, 120, 10);
+    //println(step, kick.amp, snare.amp, cymbal.amp);
+
     translate(width / 2, height / 2);
     //for (int i = se.minDeg; i < se.maxDeg; i += step) {
     for (int i = 0; i < 360; i += step) {
@@ -52,6 +57,7 @@ void renderSound() {
         x2 = sin(radians(i + step - delta)) * maxX;
         y2 = cos(radians(i + step - delta)) * maxX;
         //strokeWeight(1 + se.amp*20);
+        println(kick.amp, kick.beat);
 
         // set stroke color between cStroke and kick.c
         // depending on value of kick.amp
@@ -66,7 +72,7 @@ void renderSound() {
 
         stroke(snare.lintColor());
         noFill();
-        bezier(x - x2, y - y2, x, y, x2, y2, x2 - x, y2 - y);
+        bezier(x - x2, y - y2, x, y, x2, y2, x - x2, y - y2);
 
         fill(complementaryColor(snare.c2));
         ellipse(x - x2, y - y2, snare.size(), snare.size());
@@ -87,25 +93,40 @@ void renderSound() {
         textSize(64);
         textAlign(CENTER, CENTER);
         text(noteName(solo.note), 0, 0); 
-    }  
+    }
+
+    stroke(bass.lintColor());
+    noFill();
+    if (bass.note > 0) {
+        // draw concentric circles starting at the center of the screen and quickly growing and going out of screen
+        for (int i = 0; i < 10; i++) {
+            ellipse(0, 0, i * bass.amp * 100, i * bass.amp * 100);
+        }
+    }
 }
 
 void oscEvent(OscMessage msg) {
     if (msg.checkAddrPattern("/drum")) {
         if (msg.get(0).stringValue().equals("kick")) {
-            kick.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue());
+            kick.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue(), msg.get(2).intValue());
         }
         else if (msg.get(0).stringValue().equals("snare")) {
-            snare.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue());
+            snare.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue(), msg.get(2).intValue());
         }
         else if (msg.get(0).stringValue().equals("cymbal")) {
-            cymbal.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue());
+            cymbal.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue(), msg.get(2).intValue());
         }
         //se.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue());
     }
     else if (msg.checkAddrPattern("/key")) {
         if (msg.get(0).stringValue().equals("solo")) {
-            solo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue());
+            solo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0);
+        }
+        else if (msg.get(0).stringValue().equals("bass")) {
+            bass.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0);
+        }
+        else if (msg.get(0).stringValue().equals("chord")) {
+            chord.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0);
         }
     }
 }
