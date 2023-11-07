@@ -20,9 +20,9 @@ void setup() {
     stroke(cStroke);
     strokeWeight(2);
     
-    kick = new SoundEvent(cStroke, color(204, 102, 0));
-    snare = new SoundEvent(cStroke, color(136, 102, 51));
-    cymbal = new SoundEvent(cStroke, color(68, 102, 102));
+    kick = new KickEvent(cStroke, color(204, 102, 0));
+    snare = new SnareEvent(cStroke, color(136, 102, 51));
+    cymbal = new CymbalEvent(cStroke, color(68, 102, 102));
 
     solo = new SoundEvent(cStroke, color(#6A8759));
     bass = new SoundEvent(cStroke, color(#6A8759));
@@ -50,43 +50,11 @@ void renderSound() {
     //println(step, kick.amp, snare.amp, cymbal.amp);
 
     translate(width / 2, height / 2);
-    //for (int i = se.minDeg; i < se.maxDeg; i += step) {
-    for (int i = 0; i < 360; i += step) {
-        x = sin(radians(i + delta)) * maxX;
-        y = cos(radians(i + delta)) * maxX;
-        x2 = sin(radians(i + step - delta)) * maxX;
-        y2 = cos(radians(i + step - delta)) * maxX;
-        //strokeWeight(1 + se.amp*20);
-        println(kick.amp, kick.beat);
 
-        // set stroke color between cStroke and kick.c
-        // depending on value of kick.amp
-        stroke(kick.lintColor());
-        noFill();
-        bezier(x, y, x - x2, y - y2, x2 - x, y2 - y, x2, y2);
-        bezier(x, y, x + x2, y + y2, x2 + x, y2 + y, x2, y2);
+    kick.render(step, delta, maxX);
+    snare.render(step, delta, maxX);
+    cymbal.render(step, delta, maxX);
 
-        fill(complementaryColor(kick.c2));
-        ellipse(x, y, kick.size(), kick.size());
-        ellipse(x2, y2, kick.size(), kick.size());
-
-        stroke(snare.lintColor());
-        noFill();
-        bezier(x - x2, y - y2, x, y, x2, y2, x - x2, y - y2);
-
-        fill(complementaryColor(snare.c2));
-        ellipse(x - x2, y - y2, snare.size(), snare.size());
-
-        stroke(cymbal.lintColor());
-        noFill();
-        bezier(x + x2, y + y2, x, y, x2, y2, x2 + x, y2 + y);
-       
-        fill(complementaryColor(cymbal.c2));
-        ellipse(x + x2, y + y2, cymbal.size(), cymbal.size());
-        
-    }
-    
-     //if (se.instrument.equals("solo")) {
     if (solo.note > 0) {
         //stroke(cStroke);
         fill(solo.lintColor());

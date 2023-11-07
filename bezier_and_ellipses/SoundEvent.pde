@@ -33,5 +33,23 @@ class SoundEvent {
     // and call the original lerpColor, where lerp means linear interpolation :)
     color lintColor() {
         return beat ? lerpColor(c1, c2, amp) : c1;
-    }       
+    }
+
+    void render(float step, float delta, float maxSize) {
+        float x, y, x2, y2;
+
+        for (int i = 0; i < 360; i += step) {
+            x = sin(radians(i + delta)) * maxSize;
+            y = cos(radians(i + delta)) * maxSize;
+            x2 = sin(radians(i + step - delta)) * maxSize;
+            y2 = cos(radians(i + step - delta)) * maxSize;
+            
+            draw(x, y, x2, y2);
+        }  
+    }
+
+    void draw(float x, float y, float x2, float y2) {
+        stroke(lintColor());
+        line(x, y, x2, y2);
+    }
 }
