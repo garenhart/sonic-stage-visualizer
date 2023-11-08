@@ -1,4 +1,4 @@
-class KickEvent extends SoundEvent {
+class KickEvent extends DrumEvent {
     KickEvent(color c1, color c2) {
         super(c1, c2);
     }

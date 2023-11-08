@@ -4,7 +4,8 @@ import oscP5.*;
 
 OscP5 oscP5;
 
-SoundEvent kick, snare, cymbal, solo, bass, chord;
+DrumEvent kick, snare, cymbal;
+KeyEvent solo, bass, chord;
 
 float minX = 260;
 float step = 20, delta;
@@ -24,9 +25,9 @@ void setup() {
     snare = new SnareEvent(cStroke, color(136, 102, 51));
     cymbal = new CymbalEvent(cStroke, color(68, 102, 102));
 
-    solo = new SoundEvent(cStroke, color(#6A8759));
-    bass = new SoundEvent(cStroke, color(#6A8759));
-    chord = new SoundEvent(cStroke, color(#6A8759));
+    solo = new SoloEvent(cStroke, color(#6A8759));
+    bass = new BassEvent(cStroke, color(#6A8759));
+    chord = new ChordEvent(cStroke, color(#6A8759));
 
     //frameRate(10); // Slow down the frame rate since my computer is not handling the default 60fps very well
 }
@@ -55,22 +56,9 @@ void renderSound() {
     snare.render(step, delta, maxX);
     cymbal.render(step, delta, maxX);
 
-    if (solo.note > 0) {
-        //stroke(cStroke);
-        fill(solo.lintColor());
-        textSize(64);
-        textAlign(CENTER, CENTER);
-        text(noteName(solo.note), 0, 0); 
-    }
-
-    stroke(bass.lintColor());
-    noFill();
-    if (bass.note > 0) {
-        // draw concentric circles starting at the center of the screen and quickly growing and going out of screen
-        for (int i = 0; i < 10; i++) {
-            ellipse(0, 0, i * bass.amp * 100, i * bass.amp * 100);
-        }
-    }
+    solo.render();
+    bass.render();
+    chord.render();
 }
 
 void oscEvent(OscMessage msg) {
