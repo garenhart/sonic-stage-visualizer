@@ -25,10 +25,6 @@ class SoundEvent {
         this.beat = (beat != 0);            
     }
 
-    float size() {
-        return beat? map(amp, 0, 1, 0, 20) : 0;
-    }
-
     // Let's call this method lintColor, where lint means linear interpolation,
     // and call the original lerpColor, where lerp means linear interpolation :)
     color lintColor() {
