@@ -44,6 +44,7 @@ void renderSound() {
 
     translate(width / 2, height / 2);
 
+    //println("kick: " + kick.on);
     kick.render();
     snare.render();
     cymbal.render();
@@ -56,25 +57,25 @@ void renderSound() {
 void oscEvent(OscMessage msg) {
     if (msg.checkAddrPattern("/drum")) {
         if (msg.get(0).stringValue().equals("kick")) {
-            kick.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue(), msg.get(2).intValue());
+            kick.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue(), msg.get(2).intValue(), msg.get(3).intValue());
         }
         else if (msg.get(0).stringValue().equals("snare")) {
-            snare.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue(), msg.get(2).intValue());
+            snare.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue(), msg.get(2).intValue(), msg.get(3).intValue());
         }
         else if (msg.get(0).stringValue().equals("cymbal")) {
-            cymbal.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue(), msg.get(2).intValue());
+            cymbal.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue(), msg.get(2).intValue(), msg.get(3).intValue());
         }
         //se.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue());
     }
     else if (msg.checkAddrPattern("/key")) {
         if (msg.get(0).stringValue().equals("solo")) {
-            solo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0);
+            solo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
         }
         else if (msg.get(0).stringValue().equals("bass")) {
-            bass.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0);
+            bass.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
         }
         else if (msg.get(0).stringValue().equals("chord")) {
-            chord.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0);
+            chord.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
         }
     }
 }
@@ -86,6 +87,6 @@ color complementaryColor(color c) {
 // Method to convert MIDI note number to note name
 String noteName(int note) {
     String[] notes = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
-    println(note, notes[note % 12]);
+    //println(note, notes[note % 12]);
     return notes[note % 12];
 }

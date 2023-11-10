@@ -3,6 +3,7 @@ class SoundEvent {
     int note;
     float amp;
     boolean beat;
+    boolean on;
     color c1, c2;
     float delta;
     
@@ -21,11 +22,12 @@ class SoundEvent {
         delta = 0;
     }
     
-    void set(String instrument, int note, float amp, int beat) {
+    void set(String instrument, int note, float amp, int beat, int on) {
         this.instrument = instrument;
         this.note = note;
         this.amp = amp;
-        this.beat = (beat != 0);            
+        this.beat = (beat != 0); 
+        this.on = (on != 0);
     }
 
     // Let's call this method lintColor, where lint means linear interpolation,
@@ -39,6 +41,7 @@ class SoundEvent {
         float maxSize = 260 * amp;
         float step = 20;
 
+        if (!on) return;
         for (int i = 0; i < 360; i += step) {
             x = sin(radians(i + delta)) * maxSize;
             y = cos(radians(i + delta)) * maxSize;
