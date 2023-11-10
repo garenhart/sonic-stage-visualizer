@@ -7,8 +7,6 @@ OscP5 oscP5;
 DrumEvent kick, snare, cymbal;
 KeyEvent solo, bass, chord;
 
-float minX = 260;
-float step = 20, delta;
 //color cStroke = color(0, 150, 255, 100);
 color cStroke = color(0, 102, 153);
 
@@ -37,24 +35,18 @@ void draw() {
     
     renderSound();
         
-    delta += 0.5;
-    if (delta > 360) delta = 0;
 }
 
 void renderSound() {
-    float maxX = minX; //+ map(se.amp, 0, 1, 1, 100);
     float x, y, x2, y2;
 
     //stroke(cStroke);
 
-    step = map(kick.amp+snare.amp+cymbal.amp, 0, 3, 120, 10);
-    //println(step, kick.amp, snare.amp, cymbal.amp);
-
     translate(width / 2, height / 2);
 
-    kick.render(step, delta, maxX);
-    snare.render(step, delta, maxX);
-    cymbal.render(step, delta, maxX);
+    kick.render();
+    snare.render();
+    cymbal.render();
 
     solo.render();
     bass.render();
