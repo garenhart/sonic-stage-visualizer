@@ -8,7 +8,7 @@ class BassEvent extends KeyEvent {
     }
     
     void draw() {
-        stroke(bass.lintColor());
+        stroke(lintColor());
         noFill();
         if (note > 0) {
             // draw concentric circles starting at the center of the screen and quickly growing and going out of screen

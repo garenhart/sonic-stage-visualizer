@@ -23,9 +23,9 @@ void setup() {
     snare = new SnareEvent(cStroke, color(136, 102, 51));
     cymbal = new CymbalEvent(cStroke, color(68, 102, 102));
 
-    solo = new SoloEvent(cStroke, color(#6A8759));
-    bass = new BassEvent(cStroke, color(#6A8759));
-    chord = new ChordEvent(cStroke, color(#6A8759));
+    solo = new SoloEvent(cStroke, color(255));
+    bass = new BassEvent(cStroke, color(255));
+    chord = new ChordEvent(cStroke, color(255));
 
     //frameRate(10); // Slow down the frame rate since my computer is not handling the default 60fps very well
 }

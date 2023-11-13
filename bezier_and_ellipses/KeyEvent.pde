@@ -9,4 +9,9 @@ class KeyEvent extends SoundEvent {
     
     void draw() {
     }
+
+    color lintColor() {
+        return lerpColor(c1, c2, amp);
+    }
+
 }

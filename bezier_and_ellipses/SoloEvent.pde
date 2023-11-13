@@ -9,10 +9,9 @@ class SoloEvent extends KeyEvent {
     
     void draw() {
         if (note > 0) {
-            //stroke(cStroke);
-            fill(lintColor());
             textSize(64);
             textAlign(CENTER, CENTER);
+            fill(lintColor());
             text(noteName(note), 0, 0); 
         }
     }
