@@ -1,5 +1,5 @@
-class BassEvent extends KeyEvent {
-    BassEvent(color c1, color c2) {
+class KeyBass extends KeyEvent {
+    KeyBass(color c1, color c2) {
         super(c1, c2);
     }
 

@@ -1,5 +1,5 @@
-class ChordEvent extends KeyEvent {
-    ChordEvent(color c1, color c2) {
+class KeySolo extends KeyEvent {
+    KeySolo(color c1, color c2) {
         super(c1, c2);
     }
 

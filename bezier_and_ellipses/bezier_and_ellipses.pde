@@ -19,14 +19,14 @@ void setup() {
     stroke(cStroke);
     strokeWeight(2);
     
-    kick = new KickEvent(cStroke, color(204, 102, 0));
-    snare = new SnareEvent(cStroke, color(136, 102, 51));
-    cymbal = new CymbalEvent(cStroke, color(68, 102, 102));
-
-    solo = new SoloEvent(cStroke, color(255));
-    bass = new BassEvent(cStroke, color(255));
-    chord = new ChordEvent(cStroke, color(255));
-
+    kick = new DrumKick(cStroke, color(204, 102, 0));
+    snare = new DrumSnare(cStroke, color(136, 102, 51));
+    cymbal = new DrumCymbal(cStroke, color(68, 102, 102));
+    
+    solo = new KeySolo(cStroke, color(255));
+    bass = new KeyBass(cStroke, color(255));
+    chord = new KeyChord(cStroke, color(255));
+    
     //frameRate(10); // Slow down the frame rate since my computer is not handling the default 60fps very well
 }
 
@@ -34,21 +34,21 @@ void draw() {
     background(0, 40);
     
     renderSound();
-        
+    
 }
 
 void renderSound() {
     float x, y, x2, y2;
-
+    
     //stroke(cStroke);
-
+    
     translate(width / 2, height / 2);
-
+    
     //println("kick: " + kick.on);
     kick.render();
     snare.render();
     cymbal.render();
-
+    
     solo.render();
     bass.render();
     chord.render();

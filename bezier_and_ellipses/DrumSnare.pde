@@ -1,5 +1,5 @@
-class SnareEvent extends DrumEvent {
-    SnareEvent(color c1, color c2) {
+class DrumSnare extends DrumEvent {
+    DrumSnare(color c1, color c2) {
         super(c1, c2);
     }
 

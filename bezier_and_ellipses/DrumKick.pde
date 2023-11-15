@@ -1,5 +1,5 @@
-class KickEvent extends DrumEvent {
-    KickEvent(color c1, color c2) {
+class DrumKick extends DrumEvent {
+    DrumKick(color c1, color c2) {
         super(c1, c2);
     }
 
