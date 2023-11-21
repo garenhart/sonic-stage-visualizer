@@ -1,18 +1,10 @@
 class KeySolo extends KeyEvent {
-    KeySolo(color c1, color c2) {
-        super(c1, c2);
+    KeySolo(color c1, color c2, float velX, float velY, float velZ) {
+        super(c1, c2, velX, velY, velZ);
     }
 
     void render() {
         draw();
     }
     
-    void draw() {
-        if (note > 0) {
-            textSize(64);
-            textAlign(CENTER, CENTER);
-            fill(lintColor());
-            text(noteName(note), 0, 0); 
-        }
-    }
 }

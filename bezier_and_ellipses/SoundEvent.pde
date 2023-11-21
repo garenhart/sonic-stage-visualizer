@@ -38,7 +38,7 @@ class SoundEvent {
 
     void render() {
         float x, y, x2, y2;
-        float maxSize = 260 * amp;
+        float maxSize = 500 * amp;
         float step = 20;
 
         if (!on) return;

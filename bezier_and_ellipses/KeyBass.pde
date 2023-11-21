@@ -1,20 +1,10 @@
 class KeyBass extends KeyEvent {
-    KeyBass(color c1, color c2) {
-        super(c1, c2);
+    KeyBass(color c1, color c2, float velX, float velY, float velZ) {
+        super(c1, c2, velX, velY, velZ);
     }
 
     void render() {
         draw();
     }
     
-    void draw() {
-        stroke(lintColor());
-        noFill();
-        if (note > 0) {
-            // draw concentric circles starting at the center of the screen and quickly growing and going out of screen
-            for (int i = 0; i < 10; i++) {
-                ellipse(0, 0, i * amp * 100, i * amp * 100);
-            }
-        }
-    }
 }

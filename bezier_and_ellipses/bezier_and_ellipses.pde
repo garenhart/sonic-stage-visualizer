@@ -14,8 +14,8 @@ void setup() {
     // start oscP5, listening for incoming messages at port 8000
     oscP5 = new OscP5(this, 8000);
     
-    size(800, 800);
-    //fullScreen();
+    size(1600, 1600, P3D);
+    //fullScreen(P3D);
     stroke(cStroke);
     strokeWeight(2);
     
@@ -23,9 +23,9 @@ void setup() {
     snare = new DrumSnare(cStroke, color(136, 102, 51));
     cymbal = new DrumCymbal(cStroke, color(68, 102, 102));
     
-    solo = new KeySolo(cStroke, color(255));
-    bass = new KeyBass(cStroke, color(255));
-    chord = new KeyChord(cStroke, color(255));
+    solo = new KeySolo(cStroke, color(255, 170, 51), 0, -10, 0);
+    bass = new KeyBass(cStroke, color(180, 180, 0), -10, -10, 0);
+    chord = new KeyChord(cStroke, color(204, 102, 0), 10, -10, 10);
     
     //frameRate(10); // Slow down the frame rate since my computer is not handling the default 60fps very well
 }
@@ -69,12 +69,15 @@ void oscEvent(OscMessage msg) {
     }
     else if (msg.checkAddrPattern("/key")) {
         if (msg.get(0).stringValue().equals("solo")) {
+            solo.initPos();
             solo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
         }
         else if (msg.get(0).stringValue().equals("bass")) {
+            bass.initPos();
             bass.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
         }
         else if (msg.get(0).stringValue().equals("chord")) {
+            chord.initPos();
             chord.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
         }
     }
