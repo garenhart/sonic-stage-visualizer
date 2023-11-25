@@ -23,9 +23,9 @@ void setup() {
     snare = new DrumSnare(cStroke, color(136, 102, 51));
     cymbal = new DrumCymbal(cStroke, color(68, 102, 102));
     
-    solo = new KeySolo(cStroke, color(255, 170, 51), 0, -10, 0);
-    bass = new KeyBass(cStroke, color(180, 180, 0), -10, -10, 0);
-    chord = new KeyChord(cStroke, color(204, 102, 0), 10, -10, 10);
+    solo = new KeySolo(cStroke, color(255, 170, 51), 0, -10, 60);
+    bass = new KeyBass(cStroke, color(180, 180, 0), -10, -10, 60);
+    chord = new KeyChord(cStroke, color(204, 102, 0), 10, -10, 60);
     
     //frameRate(10); // Slow down the frame rate since my computer is not handling the default 60fps very well
 }
