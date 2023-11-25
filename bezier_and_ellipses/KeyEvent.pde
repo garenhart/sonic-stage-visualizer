@@ -2,7 +2,7 @@ class KeyEvent extends SoundEvent {
     PVector pos;
     PVector vel;
     PFont f;
-    float radius = 60;
+    float radius = 50;
 
     KeyEvent(color c1, color c2, float velX, float velY, float velZ) {
         super(c1, c2);
@@ -32,13 +32,14 @@ class KeyEvent extends SoundEvent {
                 sphereDetail(170);
                 ambient(250, 100, 100);
                 ambientLight(40, 20, 40);
-                lightSpecular(255, 215, 215);
+                lightSpecular(128, 100, 100);
                 directionalLight(185, 195, 255, -1, 1.25, -1);
                 shininess(255);
                 translate(pos.x, pos.y, pos.z);
                 fill(lintColor());
                 sphere(radius);
-                fill(255);
+                noLights();
+                fill(128);
                 textAlign(CENTER, CENTER);
                 text(noteName(note), 0, 10, radius+1); // +1 to avoid z-fighting
             popMatrix();
