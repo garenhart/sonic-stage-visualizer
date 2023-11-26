@@ -4,11 +4,11 @@ class DrumSnare extends DrumEvent {
     }
 
     void draw(float x, float y, float x2, float y2) {
-        stroke(snare.lintColor());
+        stroke(c2, alpha);
         noFill();
         bezier(x - x2, y - y2, x, y, x2, y2, x - x2, y - y2);
 
-        fill(complementaryColor(snare.c2));
+        fill(complementaryColor(c2), alpha);
         ellipse(x - x2, y - y2, snare.size(), snare.size());
     }
 }

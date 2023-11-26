@@ -4,12 +4,12 @@ class DrumKick extends DrumEvent {
     }
 
     void draw(float x, float y, float x2, float y2) {
-        stroke(lintColor());
+        stroke(c2, alpha);
         noFill();
         bezier(x, y, x - x2, y - y2, x2 - x, y2 - y, x2, y2);
         bezier(x, y, x + x2, y + y2, x2 + x, y2 + y, x2, y2);
 
-        fill(complementaryColor(c2));
+        fill(complementaryColor(c2), alpha);
         ellipse(x, y, size(), size());
         ellipse(x2, y2, size(), size());
     }

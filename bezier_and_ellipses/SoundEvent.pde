@@ -6,6 +6,7 @@ class SoundEvent {
     boolean on;
     color c1, c2;
     float delta;
+    float alpha;
     
     SoundEvent(color c1, color c2) {
         this.c1 = c1;
@@ -26,6 +27,7 @@ class SoundEvent {
         this.instrument = instrument;
         this.note = note;
         this.amp = amp;
+        alpha = amp*255; // 0-255  use alpha (opacity) to represent amplitude
         this.beat = (beat != 0); 
         this.on = (on != 0);
     }
@@ -38,7 +40,7 @@ class SoundEvent {
 
     void render() {
         float x, y, x2, y2;
-        float maxSize = 500 * amp;
+        float maxSize = 500; // * amp;
         float step = 20;
 
         if (!on) return;
