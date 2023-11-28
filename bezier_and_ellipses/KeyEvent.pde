@@ -3,6 +3,7 @@ class KeyEvent extends SoundEvent {
     PVector vel;
     PFont f;
     float radius = 50;
+    boolean offscreen = false;
 
     KeyEvent(color c1, color c2, float velX, float velY, float velZ) {
         super(c1, c2);
@@ -26,6 +27,11 @@ class KeyEvent extends SoundEvent {
     void draw() {
         if (note > 0) {
             pos.add(vel);
+
+            if (pos.x < -width/2 || pos.x > width/2 || pos.y < -height/2 || pos.y > height/2 || pos.z < -width/2 || pos.z > width/2) {
+                offscreen = true;
+                return;
+            }
 
             pushMatrix();
                 noStroke();

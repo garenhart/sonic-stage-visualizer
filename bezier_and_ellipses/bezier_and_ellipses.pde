@@ -4,8 +4,8 @@ import oscP5.*;
 
 OscP5 oscP5;
 
+ArrayList<KeyEvent> keys = new ArrayList<KeyEvent>();
 DrumEvent kick, snare, cymbal;
-KeyEvent solo, bass, chord;
 
 //color cStroke = color(0, 150, 255, 100);
 color cStroke = color(0, 102, 153);
@@ -22,11 +22,7 @@ void setup() {
     kick = new DrumKick(cStroke, color(204, 102, 0));
     snare = new DrumSnare(cStroke, color(136, 102, 51));
     cymbal = new DrumCymbal(cStroke, color(68, 102, 102));
-    
-    solo = new KeySolo(cStroke, color(255, 170, 51), 0, -10, 60);
-    bass = new KeyBass(cStroke, color(180, 180, 0), -10, -10, 60);
-    chord = new KeyChord(cStroke, color(204, 102, 0), 10, -10, 60);
-    
+     
     //frameRate(10); // Slow down the frame rate since my computer is not handling the default 60fps very well
 }
 
@@ -44,14 +40,20 @@ void renderSound() {
     
     translate(width / 2, height / 2);
     
-    //println("kick: " + kick.on);
+    // Render all drums
     kick.render();
     snare.render();
     cymbal.render();
     
-    solo.render();
-    bass.render();
-    chord.render();
+
+    // Remove keys with the sphere offscreen
+    removeOffscreenKeys();
+    println("keys: " + keys.size());
+
+    // Render all keys
+    for (int i = 0; i < keys.size(); i++) {
+        keys.get(i).render();
+    }
 }
 
 void oscEvent(OscMessage msg) {
@@ -65,20 +67,28 @@ void oscEvent(OscMessage msg) {
         else if (msg.get(0).stringValue().equals("cymbal")) {
             cymbal.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue(), msg.get(2).intValue(), msg.get(3).intValue());
         }
-        //se.set(msg.get(0).stringValue(), 0, msg.get(1).floatValue());
     }
     else if (msg.checkAddrPattern("/key")) {
         if (msg.get(0).stringValue().equals("solo")) {
-            solo.initPos();
-            solo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
+            KeyEvent keySolo = new KeySolo(cStroke, color(255, 170, 51), 0, -10, 40);
+            keySolo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
+            keys.add(keySolo);
+            // solo.initPos();
+            // solo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
         }
         else if (msg.get(0).stringValue().equals("bass")) {
-            bass.initPos();
-            bass.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
+            KeyEvent keyBass = new KeyBass(cStroke, color(180, 180, 0), -10, -10, 20);
+            keyBass.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
+            keys.add(keyBass);
+            // bass.initPos();
+            // bass.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
         }
         else if (msg.get(0).stringValue().equals("chord")) {
-            chord.initPos();
-            chord.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
+            KeyEvent keyChord = new KeyChord(cStroke, color(204, 102, 0), 10, -10, 20);
+            keyChord.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
+            keys.add(keyChord);
+            // chord.initPos();
+            // chord.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
         }
     }
 }
@@ -92,4 +102,13 @@ String noteName(int note) {
     String[] notes = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
     //println(note, notes[note % 12]);
     return notes[note % 12];
+}
+
+// Method to remove all keys with the sphere offscreen from the ArrayList
+void removeOffscreenKeys() {
+    for (int i = keys.size() - 1; i >= 0; i--) {
+        if (keys.get(i).offscreen) {
+            keys.remove(i);
+        }
+    }
 }
