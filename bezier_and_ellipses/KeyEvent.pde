@@ -11,7 +11,7 @@ class KeyEvent extends SoundEvent {
         pos = new PVector(0, 0, 0);
         vel = new PVector(velX, velY, velZ);
 
-        f = createFont("Goudy Stout", 24, true);
+        f = createFont("Gill Sans MT Bold", 36, true);
         textFont(f);
 
     }
