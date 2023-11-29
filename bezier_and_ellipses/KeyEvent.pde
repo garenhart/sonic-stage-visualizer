@@ -42,12 +42,12 @@ class KeyEvent extends SoundEvent {
                 directionalLight(185, 195, 255, -1, 1.25, -1);
                 shininess(255);
                 translate(pos.x, pos.y, pos.z);
-                fill(lintColor());
+                fill(c2); //fill(lintColor());
                 sphere(radius);
                 noLights();
                 fill(128);
                 textAlign(CENTER, CENTER);
-                text(noteName(note), 0, 10, radius+1); // +1 to avoid z-fighting
+                text(noteName(note), 0, 0, radius+1); // +1 to avoid z-fighting
             popMatrix();
         }
     }
