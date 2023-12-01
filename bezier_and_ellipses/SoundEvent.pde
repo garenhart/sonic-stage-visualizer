@@ -41,7 +41,7 @@ class SoundEvent {
     void render() {
         float x, y, x2, y2;
         float maxSize = 500; // * amp;
-        float step = 20;
+        float step = 10;
 
         if (!on) return;
         for (int i = 0; i < 360; i += step) {

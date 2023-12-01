@@ -5,7 +5,7 @@ class DrumSnare extends DrumEvent {
 
     void draw(float x, float y, float x2, float y2) {
         stroke(c2, alpha);
-        strokeWeight(beat ? 4 : 2);
+        strokeWeight(beat ? 6 : 2);
         noFill();
         bezier(x - x2, y - y2, x, y, x2, y2, x - x2, y - y2);
 
