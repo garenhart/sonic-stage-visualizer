@@ -5,6 +5,5 @@ class KeyBass extends KeyEvent {
 
     void render() {
         draw();
-    }
-    
+    }  
 }

@@ -6,5 +6,4 @@ class KeySolo extends KeyEvent {
     void render() {
         draw();
     }
-    
 }
