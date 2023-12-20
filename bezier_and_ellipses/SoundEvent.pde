@@ -48,7 +48,7 @@ class SoundEvent {
             x = sin(radians(i + delta)) * maxSize;
             y = cos(radians(i + delta)) * maxSize;
             x2 = sin(radians(i + step - delta)) * maxSize;
-            y2 = cos(radians(i + step - delta)) * maxSize;
+            y2 = cos(radians(i + step + delta)) * maxSize;
             
             draw(x, y, x2, y2);
         }
