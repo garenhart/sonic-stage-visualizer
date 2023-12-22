@@ -27,7 +27,7 @@ class SoundEvent {
         this.instrument = instrument;
         this.note = note;
         this.amp = amp;
-        alpha = amp*255; // 0-255  use alpha (opacity) to represent amplitude
+        alpha = 180; //map(amp, 0, 1, 255, 50);      //amp*255; // 0-255  use alpha (opacity) to represent amplitude
         this.beat = (beat != 0); 
         this.on = (on != 0);
     }
@@ -41,7 +41,7 @@ class SoundEvent {
     void render() {
         float x, y, x2, y2;
         float maxSize = 500; // * amp;
-        float step = 10;
+        float step = map(amp, 0, 1, 20, 5);
 
         if (!on) return;
         for (int i = 0; i < 360; i += step) {
