@@ -19,9 +19,9 @@ void setup() {
     stroke(cStroke);
     strokeWeight(2);
     
-    kick = new DrumKick(cStroke, color(204, 102, 0));
-    snare = new DrumSnare(cStroke, color(136, 102, 51));
-    cymbal = new DrumCymbal(cStroke, color(68, 102, 102));
+    kick = new DrumKick(cStroke, color(255, 128, 0));
+    snare = new DrumSnare(cStroke, color(255, 200, 0));
+    cymbal = new DrumCymbal(cStroke, color(0, 255, 153));
      
     //frameRate(10); // Slow down the frame rate since my computer is not handling the default 60fps very well
 }
