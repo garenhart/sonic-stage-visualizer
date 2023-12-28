@@ -8,7 +8,7 @@ class DrumCymbal extends DrumEvent {
         noFill();
         bezier(x + x2, y + y2, x, y, x2, y2, x2 + x, y2 + y);
        
-        fill(c2, alpha);
+        // fill(c2, alpha);
         ellipse(x + x2, y + y2, size(), size());
     }
 }

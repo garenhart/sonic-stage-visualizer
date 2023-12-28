@@ -8,7 +8,7 @@ class DrumSnare extends DrumEvent {
         noFill();
         bezier(x - x2, y - y2, x, y, x2, y2, x - x2, y - y2);
 
-        fill(c2, alpha);
-        ellipse(x - x2, y - y2, snare.size(), snare.size());
+        // fill(c2, alpha);
+        ellipse(x - x2, y - y2, size(), size());
     }
 }

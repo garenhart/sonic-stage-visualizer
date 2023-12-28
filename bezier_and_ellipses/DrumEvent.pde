@@ -4,6 +4,6 @@ class DrumEvent extends SoundEvent {
     }
 
     float size() {
-        return beat? map(amp, 0, 1, 0, 20) : 0;
+        return beat? map(amp, 0, 1, 5, 40) : 0;
     }
 }

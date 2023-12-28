@@ -9,7 +9,7 @@ class DrumKick extends DrumEvent {
         bezier(x, y, x - x2, y - y2, x2 - x, y2 - y, x2, y2);
         bezier(x, y, x + x2, y + y2, x2 + x, y2 + y, x2, y2);
 
-        fill(c2, alpha);
+        // fill(c2, alpha);
         ellipse(x, y, size(), size());
         ellipse(x2, y2, size(), size());
     }
