@@ -70,7 +70,7 @@ void oscEvent(OscMessage msg) {
     }
     else if (msg.checkAddrPattern("/key")) {
         if (msg.get(0).stringValue().equals("solo")) {
-            KeyEvent keySolo = new KeySolo(cStroke, color(68, 102, 102), random(-10, 10), random(-10, 10), 20);
+            KeyEvent keySolo = new KeySolo(cStroke, color(68, 102, 102), random(-20, 20), random(-20, 20), 40);
             keySolo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
             keys.add(keySolo);
             // solo.initPos();
