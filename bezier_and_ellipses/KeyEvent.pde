@@ -28,7 +28,7 @@ class KeyEvent extends SoundEvent {
         if (note > 0) {
             pos.add(vel);
 
-            if (pos.x < -width/2 || pos.x > width/2 || pos.y < -height/2 || pos.y > height/2 || pos.z < -width/2 || pos.z > width/2) {
+            if (pos.x < -width/4 || pos.x > width/4 || pos.y < -height/4 || pos.y > height/4 || pos.z < -width/4 || pos.z > width/4) {
                 offscreen = true;
                 return;
             }

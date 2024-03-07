@@ -14,8 +14,8 @@ void setup() {
     // start oscP5, listening for incoming messages at port 8000
     oscP5 = new OscP5(this, 8000);
     
-    size(1600, 1600, P3D);
-    //fullScreen(P3D);
+    //size(1600, 1600, P3D);
+    fullScreen(P3D);
     stroke(cStroke);
     strokeWeight(2);
     
@@ -70,21 +70,21 @@ void oscEvent(OscMessage msg) {
     }
     else if (msg.checkAddrPattern("/key")) {
         if (msg.get(0).stringValue().equals("solo")) {
-            KeyEvent keySolo = new KeySolo(cStroke, color(68, 102, 102), random(-20, 20), random(-20, 20), 40);
+            KeyEvent keySolo = new KeySolo(cStroke, color(68, 102, 102), random(-30, 30), random(-30, 30), 30);
             keySolo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
             keys.add(keySolo);
             // solo.initPos();
             // solo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
         }
         else if (msg.get(0).stringValue().equals("bass")) {
-            KeyEvent keyBass = new KeyBass(cStroke, color(255, 180, 0), -10, random(-10, 10), 20);
+            KeyEvent keyBass = new KeyBass(cStroke, color(255, 180, 0), -30, random(-30, 30), 30);
             keyBass.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
             keys.add(keyBass);
             // bass.initPos();
             // bass.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
         }
         else if (msg.get(0).stringValue().equals("chord")) {
-            KeyEvent keyChord = new KeyChord(cStroke, color(204, 102, 0), 10, random(-10, 10), 20);
+            KeyEvent keyChord = new KeyChord(cStroke, color(204, 102, 0), 30, random(-30, 30), 30);
             keyChord.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
             keys.add(keyChord);
             // chord.initPos();
@@ -97,14 +97,13 @@ color complementaryColor(color c) {
     return color(255 - red(c), 255 - green(c), 255 - blue(c));
 }
 
-// Method to convert MIDI note number to note name
+// Convert MIDI note number to note name
 String noteName(int note) {
     String[] notes = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
-    //println(note, notes[note % 12]);
     return notes[note % 12];
 }
 
-// Method to remove all keys with the sphere offscreen from the ArrayList
+// Remove all keys with the sphere offscreen from the ArrayList (to save memory)
 void removeOffscreenKeys() {
     for (int i = keys.size() - 1; i >= 0; i--) {
         if (keys.get(i).offscreen) {
