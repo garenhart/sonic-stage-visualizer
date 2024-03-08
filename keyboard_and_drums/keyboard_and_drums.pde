@@ -31,9 +31,9 @@ PImage imgDrum;
 PianoKeyboard pianoKeyboard;
 
 void setup() {
-  size(1200, 600);
+  //size(1200, 600);
   //size(1800, 900);
-  //fullScreen();
+  fullScreen();
   frameRate(30);
   smooth();
   //noStroke();
@@ -133,12 +133,15 @@ void oscEvent(OscMessage msg) {
     }
       // parse theOscMessage and extract the values from the osc message arguments
     pulseAmp = msg.get(1).floatValue();
-   
-    ParticleController pCont = new ParticleController(bkColor, pulseAmp);
-    
-    pCont.createParticles(instX, instY, (int)(pulseAmp*20));
-    // Add new controller to the array
-    pcs.add(pCont);
+
+    // Create a new ParticleController if amp, beat and on params are greater than 0
+    if (pulseAmp > 0 && msg.get(2).intValue() > 0 && msg.get(3).intValue() > 0) {
+      ParticleController pCont = new ParticleController(bkColor, pulseAmp);
+      
+      pCont.createParticles(instX, instY, (int)(pulseAmp*20));
+      // Add new controller to the array
+      pcs.add(pCont);
+    }
   }
   else if (msg.checkAddrPattern("/key")) {
     String inst = msg.get(0).stringValue();
