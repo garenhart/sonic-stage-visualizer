@@ -15,7 +15,7 @@ class ParticleController {
 
     void createParticles(float x , float y , int number) {
         for (int i = 0; i < number; i++) {
-            Particle lObj = new Particle(x, y, random(5, 15), random( -0.5, 0.5), random(1, 5), random(0, 360));
+            Particle lObj = new Particle(x, y, random(5, 15), random( -0.5, 0.5), random(5, 25), random(0, 360));
             ar.add(lObj);
         }
     }
