@@ -145,7 +145,7 @@ class PianoKeyboard {
                 fillColorBlackPressed = color(100, 100, 100,  velocity);
                 break;
             case "solo":
-                fillColorWhitePressed = color(255, 127, 80,  velocity);
+                fillColorWhitePressed = color(255, 98, 0,  velocity);
                 fillColorBlackPressed = color(100, 64, 40,  velocity);
                 break;
             default:
