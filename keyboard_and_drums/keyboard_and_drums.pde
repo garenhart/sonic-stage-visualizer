@@ -41,7 +41,7 @@ void setup() {
   // start oscP5, listening for incoming messages at port 8000
   oscP5 = new OscP5(this, 8000);
 
-  pianoKeyboard = new PianoKeyboard("top", width, height, 10, 2, 5);
+  pianoKeyboard = new PianoKeyboard("top", width, height, 10, 3, 5);
 
   //imgDrum = loadImage("comic-jazz-drum-800.png");
   imgDrum = loadImage("red-blue-yellow-drum.png");
