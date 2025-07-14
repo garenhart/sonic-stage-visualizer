@@ -40,7 +40,7 @@ class SoundEvent {
 
     void render() {
         float x, y, x2, y2;
-        float maxSize = 500; // * amp;
+        float maxSize = min(width, height) * 0.25; // Scale based on screen size
         float step = map(amp, 0, 1, 60, 1);
 
         if (!on) return;
