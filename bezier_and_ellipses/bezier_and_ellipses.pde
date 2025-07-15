@@ -70,21 +70,21 @@ void oscEvent(OscMessage msg) {
     }
     else if (msg.checkAddrPattern("/key")) {
         if (msg.get(0).stringValue().equals("solo")) {
-            KeyEvent keySolo = new KeySolo(cStroke, color(68, 102, 102), random(-30, 30), random(-30, 30), 30);
+            KeyEvent keySolo = new KeySolo(cStroke, color(68, 102, 102), random(-10, 10), random(-10, 10), 10);
             keySolo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
             keys.add(keySolo);
             // solo.initPos();
             // solo.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
         }
         else if (msg.get(0).stringValue().equals("bass")) {
-            KeyEvent keyBass = new KeyBass(cStroke, color(255, 180, 0), -30, random(-30, 30), 30);
+            KeyEvent keyBass = new KeyBass(cStroke, color(255, 180, 0), -10, random(-10, 10), 10);
             keyBass.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
             keys.add(keyBass);
             // bass.initPos();
             // bass.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
         }
         else if (msg.get(0).stringValue().equals("chord")) {
-            KeyEvent keyChord = new KeyChord(cStroke, color(204, 102, 0), 30, random(-30, 30), 30);
+            KeyEvent keyChord = new KeyChord(cStroke, color(204, 102, 0), 10, random(-10, 10), 10);
             keyChord.set(msg.get(0).stringValue(), msg.get(1).intValue(), msg.get(2).floatValue(), 0, 1);
             keys.add(keyChord);
             // chord.initPos();
