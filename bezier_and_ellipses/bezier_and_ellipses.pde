@@ -16,6 +16,7 @@ void setup() {
     
     //size(1600, 1600, P3D);
     fullScreen(P3D);
+    //fullScreen(P3D, 2); // Use external monitor
     stroke(cStroke);
     strokeWeight(2);
     
