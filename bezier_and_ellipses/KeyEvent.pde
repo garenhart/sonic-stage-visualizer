@@ -1,5 +1,6 @@
 class KeyEvent extends SoundEvent {
     PVector pos;
+    PVector renderPos;
     PVector vel;
     PFont f;
     boolean offscreen = false;
@@ -8,6 +9,7 @@ class KeyEvent extends SoundEvent {
         super(c1, c2);
 
         pos = new PVector(0, 0, 0);
+        renderPos = new PVector(0, 0, 0);
         vel = new PVector(velX, velY, velZ);
 
         f = createFont("Gill Sans MT Bold", 36, true);
@@ -17,6 +19,7 @@ class KeyEvent extends SoundEvent {
 
     void initPos() {
         pos.set(0, 0, 0);
+        renderPos.set(0, 0, 0);
     }
 
     void render() {
@@ -26,9 +29,10 @@ class KeyEvent extends SoundEvent {
     void draw() {
         if (note > 0) {
             pos.add(vel);
+            renderPos.lerp(pos, 0.18);
             float radius = map(amp, 0, 1, 25, 75);
 
-            if (pos.x < -width/4 || pos.x > width/4 || pos.y < -height/4 || pos.y > height/4 || pos.z < -width/4 || pos.z > width/4) {
+            if (renderPos.x < -width/4 || renderPos.x > width/4 || renderPos.y < -height/4 || renderPos.y > height/4 || renderPos.z < -width/4 || renderPos.z > width/4) {
                 offscreen = true;
                 return;
             }
@@ -41,13 +45,16 @@ class KeyEvent extends SoundEvent {
                 lightSpecular(128, 100, 100);
                 directionalLight(185, 195, 255, -1, 1.25, -1);
                 shininess(255);
-                translate(pos.x, pos.y, pos.z);
+                translate(renderPos.x, renderPos.y, renderPos.z);
                 fill(c2); //fill(lintColor());
                 sphere(radius);
                 noLights();
-                fill(128);
+                textSize(max(24, radius * 0.45));
+                stroke(0);
+                strokeWeight(3);
+                fill(255);
                 textAlign(CENTER, CENTER);
-                text(noteName(note), 0, 0, radius+1); // +1 to avoid z-fighting
+                text(noteName(note), 0, 0, radius + 2); // +2 to avoid z-fighting
             popMatrix();
         }
     }
