@@ -3,9 +3,12 @@ class DrumKick extends DrumEvent {
         super(c1, c2);
     }
 
-    void draw(float x, float y, float x2, float y2) {
+    void beginShapeStyle() {
         stroke(beat ? c2 : 255, alpha);
         noFill();
+    }
+
+    void draw(float x, float y, float x2, float y2) {
         bezier(x, y, x - x2, y - y2, x2 - x, y2 - y, x2, y2);
         bezier(x, y, x + x2, y + y2, x2 + x, y2 + y, x2, y2);
 

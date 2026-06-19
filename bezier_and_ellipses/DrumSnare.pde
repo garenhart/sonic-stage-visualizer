@@ -3,9 +3,12 @@ class DrumSnare extends DrumEvent {
         super(c1, c2);
     }
 
-    void draw(float x, float y, float x2, float y2) {
+    void beginShapeStyle() {
         stroke(beat ? c2 : 255, alpha);
         noFill();
+    }
+
+    void draw(float x, float y, float x2, float y2) {
         bezier(x - x2, y - y2, x, y, x2, y2, x - x2, y - y2);
 
         // fill(c2, alpha);

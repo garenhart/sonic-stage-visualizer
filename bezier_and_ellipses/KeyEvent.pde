@@ -2,7 +2,6 @@ class KeyEvent extends SoundEvent {
     PVector pos;
     PVector renderPos;
     PVector vel;
-    PFont f;
     boolean offscreen = false;
 
     KeyEvent(color c1, color c2, float velX, float velY, float velZ) {
@@ -11,10 +10,7 @@ class KeyEvent extends SoundEvent {
         pos = new PVector(0, 0, 0);
         renderPos = new PVector(0, 0, 0);
         vel = new PVector(velX, velY, velZ);
-
-        f = createFont("Gill Sans MT Bold", 36, true);
-        textFont(f);
-
+        // Font is created once in setup() and shared (see keyFont).
     }
 
     void initPos() {
@@ -39,7 +35,6 @@ class KeyEvent extends SoundEvent {
 
             pushMatrix();
                 noStroke();
-                sphereDetail(170);
                 ambient(250, 100, 100);
                 ambientLight(40, 20, 40);
                 lightSpecular(128, 100, 100);

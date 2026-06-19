@@ -39,17 +39,21 @@ class SoundEvent {
     }
 
     void render() {
+        if (!on) return;
+
         float x, y, x2, y2;
         float maxSize = min(width, height) * 0.25; // Scale based on screen size
         float step = map(amp, 0, 1, 60, 1);
 
-        if (!on) return;
+        // Stroke/fill are constant for the whole shape, so set them once here
+        // rather than per segment inside the loop (up to 360 iterations).
+        beginShapeStyle();
         for (int i = 0; i < 360; i += step) {
             x = sin(radians(i + delta)) * maxSize;
             y = cos(radians(i + delta)) * maxSize;
             x2 = sin(radians(i + step - delta)) * maxSize;
             y2 = cos(radians(i + step + delta)) * maxSize;
-            
+
             draw(x, y, x2, y2);
         }
 
@@ -57,8 +61,13 @@ class SoundEvent {
         if (delta > 360) delta = 0;
     }
 
-    void draw(float x, float y, float x2, float y2) {
+    // Set the stroke/fill state shared by every segment of this shape.
+    // Subclasses override to match their own appearance.
+    void beginShapeStyle() {
         stroke(lintColor());
+    }
+
+    void draw(float x, float y, float x2, float y2) {
         line(x, y, x2, y2);
     }
 }

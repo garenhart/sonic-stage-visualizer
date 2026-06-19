@@ -1,11 +1,19 @@
 // Inspired by: https://openprocessing.org/sketch/160305
 // Programming for Artists - Sketch 50
 import oscP5.*;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 OscP5 oscP5;
 
-ArrayList<KeyEvent> keys = new ArrayList<KeyEvent>();
+// oscEvent() runs on the network thread while draw() iterates this list on the
+// animation thread, so it must be a thread-safe collection.
+List<KeyEvent> keys = new CopyOnWriteArrayList<KeyEvent>();
 DrumEvent kick, snare, cymbal;
+
+// One shared font for all key labels. createFont() rasterizes glyphs, so it must
+// not run per note event.
+PFont keyFont;
 
 //color cStroke = color(0, 150, 255, 100);
 color cStroke = color(0, 102, 153);
@@ -19,7 +27,13 @@ void setup() {
     //fullScreen(P3D, 2); // Use external monitor
     stroke(cStroke);
     strokeWeight(2);
-    
+
+    // Sphere tessellation and the label font are global, frame-invariant state.
+    // Setting them once here keeps them out of the per-sphere render path.
+    sphereDetail(30);
+    keyFont = createFont("Gill Sans MT Bold", 36, true);
+    textFont(keyFont);
+
     kick = new DrumKick(cStroke, color(255, 128, 0));
     snare = new DrumSnare(cStroke, color(255, 200, 0));
     cymbal = new DrumCymbal(cStroke, color(0, 255, 153));
@@ -35,25 +49,19 @@ void draw() {
 }
 
 void renderSound() {
-    float x, y, x2, y2;
-    
-    //stroke(cStroke);
-    
     translate(width / 2, height / 2);
-    
+
     // Render all drums
     kick.render();
     snare.render();
     cymbal.render();
-    
 
     // Remove keys with the sphere offscreen
     removeOffscreenKeys();
-    println("keys: " + keys.size());
 
     // Render all keys
-    for (int i = 0; i < keys.size(); i++) {
-        keys.get(i).render();
+    for (KeyEvent key : keys) {
+        key.render();
     }
 }
 
@@ -104,11 +112,9 @@ String noteName(int note) {
     return notes[note % 12];
 }
 
-// Remove all keys with the sphere offscreen from the ArrayList (to save memory)
+// Remove all keys with the sphere offscreen from the list (to save memory).
+// removeIf does this in a single pass; index removal on a CopyOnWriteArrayList
+// would copy the backing array once per removed element.
 void removeOffscreenKeys() {
-    for (int i = keys.size() - 1; i >= 0; i--) {
-        if (keys.get(i).offscreen) {
-            keys.remove(i);
-        }
-    }
+    keys.removeIf(key -> key.offscreen);
 }
