@@ -34,6 +34,7 @@ void setup() {
   //size(1200, 600);
   //size(1800, 900);
   fullScreen();
+  //fullScreen(2); // for dual monitor setup
   frameRate(30);
   smooth();
   //noStroke();

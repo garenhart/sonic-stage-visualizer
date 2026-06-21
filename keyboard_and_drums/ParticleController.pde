@@ -25,32 +25,24 @@ class ParticleController {
     // -1 - remove particles that moved out of the screen
     // >=0 - remove particles that moved farther than the travelDistance from the center
     void update(PImage pimg) {
-        List <Particle > remove = new CopyOnWriteArrayList <Particle>();
         for (Particle tmp : ar) {
             tmp.x = tmp.cx + sin(radians(tmp.angle)) * (tmp.dist * counter);
             tmp.y = tmp.cy - cos(radians(tmp.angle)) * (tmp.dist * counter);
-            
-            if (travelDistance > -1) {
-                // Add those particles that moved farther than the travelDistance from the center to "remove" list
-                if (dist(tmp.x, tmp.y, tmp.cx, tmp.cy) > travelDistance) {
-                    remove.add(tmp);
-                }
-            }
-            else {
-                // Add those particles that moved out of the screen to "remove" list
-                if (tmp.x < 0 || tmp.x > pimg.width) {
-                    remove.add(tmp);
-                }
-                if (tmp.y < 0 || tmp.y > pimg.height) {
-                    remove.add(tmp);
-                }
-            }
         }
-        
-        // Remove particles beyobd the screen boundaries from the particle list
-        for (Particle tmp : remove) {
-            ar.remove(tmp);
+
+        // removeIf prunes dead particles in a single backing-array copy. The old
+        // code built a temp list and called ar.remove() per element, copying the
+        // whole CopyOnWriteArrayList once for every particle removed.
+        ar.removeIf(tmp -> isExpired(tmp, pimg));
+    }
+
+    // A particle is expired once it travels past travelDistance from its origin,
+    // or (when travelDistance is -1) once it leaves the image bounds.
+    boolean isExpired(Particle tmp, PImage pimg) {
+        if (travelDistance > -1) {
+            return dist(tmp.x, tmp.y, tmp.cx, tmp.cy) > travelDistance;
         }
+        return tmp.x < 0 || tmp.x > pimg.width || tmp.y < 0 || tmp.y > pimg.height;
     }
     
     void render(PImage pimg) {
@@ -58,22 +50,16 @@ class ParticleController {
 
         for (Particle tmp : ar) {
             strokeWeight(tmp.size / 5);
-            if (tmp.x > 0 && tmp.x < pimg.width) {
-                if (tmp.y > 0 && tmp.y < pimg.height) {
-                    int loc = (int)tmp.x + (int)tmp.y * pimg.width;
-                    int pix = pimg.pixels[loc];
+            if (tmp.x > 0 && tmp.x < pimg.width && tmp.y > 0 && tmp.y < pimg.height) {
+                int loc = (int)tmp.x + (int)tmp.y * pimg.width;
+                int pix = pimg.pixels[loc]; // sample the source pixel once
 
-                    // if pixel is transparent, use the background color
-                    if (alpha(pimg.pixels[loc]) == 0) {
-                        stroke(bkColor + colorAdjust);
-                    }
-                    else {
-                        float r = adjustColor(red(pimg.pixels[loc]));
-                        float g = adjustColor(green(pimg.pixels[loc]));
-                        float b = adjustColor(blue(pimg.pixels[loc]));
-
-                        stroke(r,g,b);
-                    }
+                // if pixel is transparent, use the background color
+                if (alpha(pix) == 0) {
+                    stroke(bkColor + colorAdjust);
+                }
+                else {
+                    stroke(adjustColor(red(pix)), adjustColor(green(pix)), adjustColor(blue(pix)));
                 }
             }
             tmp.render("");
