@@ -27,8 +27,15 @@ int circleColor;
 
 PImage imgDrum;
 
-// declare variables for piano keyboard
-PianoKeyboard pianoKeyboard;
+// top-left position and scale of the drum image, fit into the band between the two keyboards
+float imgX;
+float imgY;
+float imgScale;
+
+// declare variables for piano keyboards
+// topKeyboard (top) handles bass keys, bottomKeyboard (bottom) handles solo/chord keys
+PianoKeyboard topKeyboard;
+PianoKeyboard bottomKeyboard;
 
 void setup() {
   //size(1200, 600);
@@ -42,18 +49,29 @@ void setup() {
   // start oscP5, listening for incoming messages at port 8000
   oscP5 = new OscP5(this, 8000);
 
-  pianoKeyboard = new PianoKeyboard("top", width, height, 10, 3, 5);
+  topKeyboard = new PianoKeyboard("top", width, height, 10, 3, 5);
+  bottomKeyboard = new PianoKeyboard("bottom", width, height, 10, 3, 5);
 
   //imgDrum = loadImage("comic-jazz-drum-800.png");
   imgDrum = loadImage("red-blue-yellow-drum.png");
 
   imgDrum.loadPixels();
 
+  // fit and center the drum image in the open band between the top and bottom keyboards,
+  // scaling it down (never up) so it never overlaps either keyboard
+  float bandTop = topKeyboard.height;
+  float bandHeight = (height - bottomKeyboard.height) - bandTop;
+  float fitHeight = bandHeight * 0.9; // leave a margin so the drum never touches the keys
+  imgScale = min(1.0, min((float)width / imgDrum.width, fitHeight / imgDrum.height));
+  float imgW = imgDrum.width * imgScale;
+  float imgH = imgDrum.height * imgScale;
+  imgX = (width - imgW) / 2;
+  imgY = bandTop + (bandHeight - imgH) / 2;
 
   // initialize variables
   pulseAmp = 0;
   circleX = width/2;
-  circleY = height/2 + pianoKeyboard.height/2;
+  circleY = height/2 + topKeyboard.height/2;
   circleMinSize = 10;
   circleMaxSize = height/2-circleMinSize;
   circleSize = 0;
@@ -69,15 +87,17 @@ void draw() {
   // calculate the color of the circle based on pulseAmp
   circleColor = (int)map(pulseAmp, 0, 1, 0, 255);
 
-  // draw the piano keyboard
-  pianoKeyboard.render();    
+  // draw the piano keyboards
+  topKeyboard.render();
+  bottomKeyboard.render();
 
   // draw the image in the middle of the screen
   // image(imgDrum, width/2-imgDrum.width/2, height/2-imgDrum.height/2);
 
   pushMatrix();
-  translate(width/2-imgDrum.width/2, height/2-imgDrum.height/2+pianoKeyboard.height);
-  // draw the image in the middle of the screen below the piano keyboard
+  translate(imgX, imgY);
+  scale(imgScale);
+  // draw the image centered between the two keyboards (particles share this scaled space)
   image (imgDrum, 0, 0);
 
   for (ParticleController current : pcs) {
@@ -102,8 +122,8 @@ void draw() {
 
 //   if (msg.checkAddrPattern("/note")) {
 //     int note = msg.get(0).intValue();
-//     pianoKeyboard.resetKeys();
-//     pianoKeyboard.setKeyPressed(note, true);
+//     topKeyboard.resetKeys();
+//     topKeyboard.setKeyPressed(note, true);
 //   }
 // }
 
@@ -148,19 +168,27 @@ void oscEvent(OscMessage msg) {
     String inst = msg.get(0).stringValue();
     int note = msg.get(1).intValue();
     float amp = msg.get(2).floatValue();
-    pianoKeyboard.resetKeys();
-    pianoKeyboard.setKeyPressed(inst, note, amp);
+    if (inst.equals("bass")) {
+      topKeyboard.resetKeys();
+      topKeyboard.setKeyPressed(inst, note, amp);
+    } else {
+      bottomKeyboard.resetKeys();
+      bottomKeyboard.setKeyPressed(inst, note, amp);
+    }
   }
 }
 
 void mouseClicked() {
     ParticleController pCont = new ParticleController(bkColor, -1);
     
-    pCont.createParticles(mouseX-(width/2-imgDrum.width/2), mouseY-(height/2+pianoKeyboard.height-imgDrum.height/2), 50);
+    // map the screen click back into the image's (scaled) coordinate space
+    float clickX = (mouseX - imgX) / imgScale;
+    float clickY = (mouseY - imgY) / imgScale;
+    pCont.createParticles(clickX, clickY, 50);
     // Add new controller to the array
     pcs.add(pCont);
 
-    println(mouseX-(width/2-imgDrum.width/2), mouseY-(height/2+pianoKeyboard.height-imgDrum.height/2));
+    println(clickX, clickY);
 }
 
 
