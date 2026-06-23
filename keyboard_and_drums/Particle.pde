@@ -1,53 +1,71 @@
 class Particle {
-    float x, y, cx, cy, size, step, dist, angle;
-    float counter; 
-    
-    Particle(float cx, float cy, float size, float step, float dist, float angle) {
-        this.cx = cx;
-        this.cy = cy;
+    float x, y;       // current position (image space)
+    float vx, vy;     // velocity, advanced by the controller's physics
+    float size;       // base size in pixels
+    float spin;       // current rotation of the shape
+    float step;       // rotation speed per frame
+    String shape;     // "circle" | "star" | "spark" | "cross"
+
+    Particle(float x, float y, float vx, float vy, float size, float step, String shape) {
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
         this.size = size;
-        this.dist = dist;
         this.step = step;
-        this.angle = angle;
+        this.spin = random(TWO_PI);
+        this.shape = shape;
     }
-    
-    // renders particle pattern depending on argument value 
-    void render(String pattern) {
-        switch(pattern) {
-            case "cross" : renderCross();
-                break;
-            default : renderCross();
-            break;
-    }
-    }
-    
-    void renderCross() {
-        counter += step;
-        if (counter > TWO_PI) {
-            counter = 0;
+
+    // renders the particle at a (possibly shrunk) display size.
+    // fill and stroke colour/alpha are set by the controller before this call.
+    void render(float displaySize) {
+        spin += step;
+        switch (shape) {
+            case "circle": renderCircle(displaySize); break;
+            case "star":   renderStar(displaySize);   break;
+            case "spark":  renderSpark(displaySize);  break;
+            default:       renderCross(displaySize);  break;
         }
-        if (counter < 0) {
-            counter = TWO_PI;
+    }
+
+    // kick: soft filled orb
+    void renderCircle(float s) {
+        noStroke();
+        ellipse(x, y, s, s);
+    }
+
+    // snare: spinning 5-point star
+    void renderStar(float s) {
+        float outer = s / 2;
+        float inner = s / 4;
+        beginShape();
+        for (int i = 0; i < 10; i++) {
+            float r = (i % 2 == 0) ? outer : inner;
+            float a = spin + i * PI / 5;
+            vertex(x + cos(a) * r, y + sin(a) * r);
         }
-        
-        float halfX = sin(counter) * (size / 2);
-        float halfY = cos(counter) * (size / 2);
-        
-        float x1 = x - halfX;
-        float x2 = x + halfX;
-        float y1 = y - halfY;
-        float y2 = y + halfY;
-        
-        line(x1,y1,x2,y2);
-        
-        halfX = sin(counter + PI / 2) * (size / 2);
-        halfY = cos(counter + PI / 2) * (size / 2);
-        
-        x1 = x - halfX;
-        x2 = x + halfX;
-        y1 = y - halfY;
-        y2 = y + halfY;
-        
-        line(x1, y1, x2, y2);
+        endShape(CLOSE);
+    }
+
+    // cymbal: thin twinkling sparkle of radial lines
+    void renderSpark(float s) {
+        noFill();
+        for (int i = 0; i < 4; i++) {
+            float a = spin + i * HALF_PI;
+            line(x, y, x + cos(a) * (s / 2), y + sin(a) * (s / 2));
+        }
+    }
+
+    // default / mouse: spinning cross (the original look)
+    void renderCross(float s) {
+        noFill();
+        float halfX = sin(spin) * (s / 2);
+        float halfY = cos(spin) * (s / 2);
+        line(x - halfX, y - halfY, x + halfX, y + halfY);
+
+        halfX = sin(spin + HALF_PI) * (s / 2);
+        halfY = cos(spin + HALF_PI) * (s / 2);
+        line(x - halfX, y - halfY, x + halfX, y + halfY);
     }
 }

@@ -104,6 +104,8 @@ void draw() {
       current.update(imgDrum);
       current.render(imgDrum);
   }
+  // drop bursts that have fully faded so the list doesn't grow without bound
+  pcs.removeIf(pc -> pc.isDone());
   popMatrix();
 
   // draw the circle
@@ -131,6 +133,7 @@ void draw() {
 void oscEvent(OscMessage msg) {
   int instX = 0;
   int instY = 0;
+  String shape = "cross";  // particle shape per drum voice
 
   // check if theOscMessage has an address pattern we are looking for
   if(msg.checkAddrPattern("/drum")) {
@@ -138,18 +141,22 @@ void oscEvent(OscMessage msg) {
       case "kick":
         instX = 530;
         instY = 530;
+        shape = "circle";
         break;
       case "snare":
         instX = 450;
         instY = 200;
+        shape = "star";
         break;
       case "cymbal":
         instX = 650;
         instY = 50;
+        shape = "spark";
         break;
       default:
         instX = 0;
         instY = 0;
+        shape = "cross";
         break;
     }
       // parse theOscMessage and extract the values from the osc message arguments
@@ -157,8 +164,8 @@ void oscEvent(OscMessage msg) {
 
     // Create a new ParticleController if amp, beat and on params are greater than 0
     if (pulseAmp > 0 && msg.get(2).intValue() > 0 && msg.get(3).intValue() > 0) {
-      ParticleController pCont = new ParticleController(bkColor, pulseAmp);
-      
+      ParticleController pCont = new ParticleController(bkColor, pulseAmp, shape);
+
       pCont.createParticles(instX, instY, (int)(pulseAmp*100));
       // Add new controller to the array
       pcs.add(pCont);
@@ -179,8 +186,8 @@ void oscEvent(OscMessage msg) {
 }
 
 void mouseClicked() {
-    ParticleController pCont = new ParticleController(bkColor, -1);
-    
+    ParticleController pCont = new ParticleController(bkColor, -1, "cross");
+
     // map the screen click back into the image's (scaled) coordinate space
     float clickX = (mouseX - imgX) / imgScale;
     float clickY = (mouseY - imgY) / imgScale;

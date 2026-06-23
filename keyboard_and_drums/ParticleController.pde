@@ -1,69 +1,84 @@
 class ParticleController {
     List <Particle > ar = new CopyOnWriteArrayList <Particle>();
-    int counter;
+    int counter;        // age in frames; all particles in a controller share a spawn frame
     int bkColor;
     int colorAdjust;
-    int travelDistance;
-    
+    int lifespan;       // frames before the burst has fully faded out
+    float drag;         // per-frame velocity multiplier (<1 slows the burst)
+    float gravity;      // per-frame downward acceleration
+    String shape;       // shape spawned by this burst
+
     // Constructor
-    ParticleController(int bkColor, float amp) {
+    ParticleController(int bkColor, float amp, String shape) {
         counter = 0;
         colorAdjust = 50;
         this.bkColor = bkColor;
-        this.travelDistance = (int)(amp*100);
+        this.shape = shape;
+        // louder hits linger a little longer; mouse clicks (amp < 0) get a default
+        this.lifespan = amp < 0 ? 45 : (int)(30 + amp * 40);
+        this.drag = 0.92;
+        this.gravity = 0.25;
     }
 
     void createParticles(float x , float y , int number) {
         for (int i = 0; i < number; i++) {
-            Particle lObj = new Particle(x, y, random(5, 15), random( -0.5, 0.5), random(5, 25), random(0, 360));
-            ar.add(lObj);
+            // explode outward in every direction at a random speed
+            float angle = random(TWO_PI);
+            float speed = random(4, 14);
+            float vx = cos(angle) * speed;
+            float vy = sin(angle) * speed;
+            ar.add(new Particle(x, y, vx, vy, random(6, 16), random(-0.4, 0.4), shape));
         }
     }
 
-    // Update the position of the particles
-    // Remove those particles that meet the remove criterion
-    // -1 - remove particles that moved out of the screen
-    // >=0 - remove particles that moved farther than the travelDistance from the center
+    // Advance the physics: drag eases the burst out, gravity makes it arc and fall.
     void update(PImage pimg) {
-        for (Particle tmp : ar) {
-            tmp.x = tmp.cx + sin(radians(tmp.angle)) * (tmp.dist * counter);
-            tmp.y = tmp.cy - cos(radians(tmp.angle)) * (tmp.dist * counter);
+        for (Particle p : ar) {
+            p.vx *= drag;
+            p.vy *= drag;
+            p.vy += gravity;
+            p.x += p.vx;
+            p.y += p.vy;
         }
-
-        // removeIf prunes dead particles in a single backing-array copy. The old
-        // code built a temp list and called ar.remove() per element, copying the
-        // whole CopyOnWriteArrayList once for every particle removed.
-        ar.removeIf(tmp -> isExpired(tmp, pimg));
+        // the whole burst shares an age, so it expires together once it has faded out
+        ar.removeIf(p -> counter >= lifespan);
     }
 
-    // A particle is expired once it travels past travelDistance from its origin,
-    // or (when travelDistance is -1) once it leaves the image bounds.
-    boolean isExpired(Particle tmp, PImage pimg) {
-        if (travelDistance > -1) {
-            return dist(tmp.x, tmp.y, tmp.cx, tmp.cy) > travelDistance;
-        }
-        return tmp.x < 0 || tmp.x > pimg.width || tmp.y < 0 || tmp.y > pimg.height;
+    // returns true once this burst has fully faded
+    boolean isDone() {
+        return counter >= lifespan && ar.isEmpty();
     }
-    
+
     void render(PImage pimg) {
         counter += 1;
+        // 1.0 when fresh, easing to 0.0 at end of life -> drives fade + shrink
+        float life = constrain(1.0 - (float)counter / lifespan, 0, 1);
 
-        for (Particle tmp : ar) {
-            strokeWeight(tmp.size / 5);
-            if (tmp.x > 0 && tmp.x < pimg.width && tmp.y > 0 && tmp.y < pimg.height) {
-                int loc = (int)tmp.x + (int)tmp.y * pimg.width;
-                int pix = pimg.pixels[loc]; // sample the source pixel once
-
-                // if pixel is transparent, use the background color
-                if (alpha(pix) == 0) {
-                    stroke(bkColor + colorAdjust);
-                }
-                else {
-                    stroke(adjustColor(red(pix)), adjustColor(green(pix)), adjustColor(blue(pix)));
+        // additive blending makes overlapping particles bloom into bright hotspots
+        blendMode(ADD);
+        for (Particle p : ar) {
+            // sample the drum pixel underneath; fall back to a soft glow off-image
+            float r = bkColor + colorAdjust;
+            float g = bkColor + colorAdjust;
+            float b = bkColor + colorAdjust;
+            if (p.x > 0 && p.x < pimg.width && p.y > 0 && p.y < pimg.height) {
+                int pix = pimg.pixels[(int)p.x + (int)p.y * pimg.width];
+                if (alpha(pix) != 0) {
+                    r = adjustColor(red(pix));
+                    g = adjustColor(green(pix));
+                    b = adjustColor(blue(pix));
                 }
             }
-            tmp.render("");
+
+            float a = 255 * life;
+            stroke(r, g, b, a);
+            fill(r, g, b, a);
+            strokeWeight(p.size / 5 * life + 0.5);
+
+            // shrink as the particle ages (never fully to zero before it fades)
+            p.render(p.size * (0.4 + 0.6 * life));
         }
+        blendMode(BLEND);
      }
 
      // Adjust the color of the particles to make them more visible
