@@ -31,7 +31,7 @@ void setup() {
     // Sphere tessellation and the label font are global, frame-invariant state.
     // Setting them once here keeps them out of the per-sphere render path.
     sphereDetail(30);
-    keyFont = createFont("Gill Sans MT Bold", 36, true);
+    keyFont = createFont("GillSans-Bold", 36, true);
     textFont(keyFont);
 
     kick = new DrumKick(cStroke, color(255, 128, 0));
