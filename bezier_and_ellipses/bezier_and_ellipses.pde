@@ -23,15 +23,15 @@ void setup() {
     oscP5 = new OscP5(this, 8000);
     
     //size(1600, 1600, P3D);
-    fullScreen(P3D);
-    //fullScreen(P3D, 2); // Use external monitor
+    //fullScreen(P3D);
+    fullScreen(P3D, 2); // Use external monitor
     stroke(cStroke);
     strokeWeight(2);
 
     // Sphere tessellation and the label font are global, frame-invariant state.
     // Setting them once here keeps them out of the per-sphere render path.
     sphereDetail(30);
-    keyFont = createFont("GillSans-Bold", 36, true);
+    keyFont = createFont("Monospaced", 36, true);
     textFont(keyFont);
 
     kick = new DrumKick(cStroke, color(255, 128, 0));
